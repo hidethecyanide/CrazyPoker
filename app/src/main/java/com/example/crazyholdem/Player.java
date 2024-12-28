@@ -65,4 +65,18 @@ public class Player {
         this.isFolded = true;
     }
 
+    public void checkHand(){
+        playerHand.isHighCard(playerHand.hand);
+        playerHand.isPair(playerHand.hand);
+        //playerHand.isTwoPair(playerHand.hand);
+        //playerHand.isThreeKind(playerHand.hand);
+        //playerHand.isStraight(playerHand.hand);
+        //playerHand.isFlush(playerHand.hand);
+        //playerHand.isFullHouse(playerHand.hand);
+        //playerHand.isFourKind(playerHand.hand);
+        //playerHand.isFiveKind(playerHand.hand);
+        //playerHand.isStraightFlush(playerHand.hand);
+        //playerHand.isRoyalFlush(playerHand.hand);
+    }
+
 }

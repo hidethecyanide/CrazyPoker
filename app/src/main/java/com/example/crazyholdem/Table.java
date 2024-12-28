@@ -20,7 +20,6 @@ public class Table {
         stake = 0;
         nonFoldedPlayers = new ArrayList<>();
     }
-
     public enum HandType {
         ROYAL_FLUSH(11),
         STRAIGHT_FLUSH(10),
@@ -46,43 +45,33 @@ public class Table {
     }
     public void addPlayer(Player player) {
         players.add(player);
-        nonFoldedPlayers.add(player);
     }
-
     public void removePlayer(Player player) {
         players.remove(player);
     }
-
     public ArrayList<Player> getPlayers() {
         return players;
     }
-
-
     public int getStandingBet(){
         return standingBet;
     }
     public static ArrayList<Card> getCommuntiyCards(){
         return communityCards;
     }
-
     public void setStandingBet(int standingBet){
         this.standingBet = standingBet;
     }
-
     public void dealCard(Player player, int cardIndex) {
         player.playerHand.addCardToHand(deck.getDeck().get(cardIndex));
     }
-
     public void dealCommunityCards(int numberOfCards, int cardIndex) {
         for (int i = cardIndex; i < numberOfCards + cardIndex; i++) {
             communityCards.add(deck.getDeck().get(i));
         }
     }
-
     public void clearCommunityCards(){
         communityCards.clear();
     }
-
     public void showdown(int pot) {
         for( Player player : nonFoldedPlayers){
             player.playerHand.updateHandStrength();
@@ -116,6 +105,6 @@ public class Table {
         }
 
     }
-
-
 }
+
+public void startRound();

@@ -62,16 +62,19 @@ public class PlayerHand {
         return numLowHand;
     }
 
-    // Method to evaluate the hand (stub for actual implementation)
-    public void evaluateHand(List<Card> hand) {
-        // Logic to analyze the hand and set the appropriate fields.
-        // Example:
-        // if (isPair(hand)) this.pair = true;
-        // Add checks for other hand types.
+    public void isHighCard(List<Card> hand) {
+        highCard = true;
+        if(hand.get(0).getValue() > hand.get(1).getValue()){
+            numHighHand = hand.get(0).getValue();
+            numLowHand = hand.get(1).getValue();
+        }
+        else{
+            numHighHand = hand.get(1).getValue();
+            numLowHand = hand.get(0).getValue();
+        }
     }
-
     // Example hand evaluator (you would expand this)
-    private void isPair(List<Card> hand) {
+    public void isPair(List<Card> hand) {
         if(hand.get(0) == hand.get(1)){
             pair = true;
             return;
@@ -89,6 +92,28 @@ public class PlayerHand {
             }
         }
     }
+
+    public void isTwoPair(List<Card> hand) {
+        int pairCount = 0;
+        if(hand.get(0) == hand.get(1)){
+            pair = true;
+            pairCount++;
+        }
+
+        for (int i = 0; i < Table.getCommuntiyCards().size(); i++) {
+            if (hand.get(0) == Table.getCommuntiyCards().get(i)){
+                pair = true;
+                numHighHand = hand.get(0).getValue();
+                return;
+            }
+            else if(hand.get(1) == Table.getCommuntiyCards().get(i)) {
+                pair = true;
+                numHighHand = hand.get(1).getValue();
+                return;
+            }
+        }
+
+    }
     public void clearHand(){
         hand.clear();
     }
@@ -98,21 +123,6 @@ public class PlayerHand {
     public ArrayList<Card> getHand(){
         return hand;
     }
-    public int updateHandStrength(){
-        if (royalFlush) handStrength = Table.HandType.ROYAL_FLUSH.getStrength();
-        else if (straightFlush) handStrength = Table.HandType.STRAIGHT_FLUSH.getStrength();
-        else if (fiveKind) handStrength = Table.HandType.FIVE_KIND.getStrength();
-        else if (fourKind) handStrength = Table.HandType.FOUR_KIND.getStrength();
-        else if (fullHouse) handStrength = Table.HandType.FULL_HOUSE.getStrength();
-        else if (flush) handStrength = Table.HandType.FLUSH.getStrength();
-        else if (straight) handStrength = Table.HandType.STRAIGHT.getStrength();
-        else if (threeKind) handStrength = Table.HandType.THREE_KIND.getStrength();
-        else if (twoPair) handStrength = Table.HandType.TWO_PAIR.getStrength();
-        else if (pair) handStrength = Table.HandType.PAIR.getStrength();
-        else handStrength = Table.HandType.HIGH_CARD.getStrength();
-        return handStrength;
-    }
-
     public int getHandStrength(){
         return handStrength;
     }
