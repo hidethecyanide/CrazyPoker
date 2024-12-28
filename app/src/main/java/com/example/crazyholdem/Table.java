@@ -74,7 +74,7 @@ public class Table {
     }
     public void showdown(int pot) {
         for( Player player : nonFoldedPlayers){
-            player.playerHand.updateHandStrength();
+            player.checkHand();
         }
         // Step 2: Sort players by hand strength
         Collections.sort(nonFoldedPlayers, (p1, p2) -> p2.playerHand.getHandStrength() - p1.playerHand.getHandStrength());
@@ -105,6 +105,6 @@ public class Table {
         }
 
     }
-}
-
 public void startRound();
+
+}
