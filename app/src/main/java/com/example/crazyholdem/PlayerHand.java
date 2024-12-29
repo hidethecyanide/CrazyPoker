@@ -8,9 +8,7 @@ public class PlayerHand {
     ArrayList<Card> hand;
     ArrayList<Card> scoringHand;
 
-    // Default constructor
     public PlayerHand() {
-
         this.hand = new ArrayList<>();
         handStrength = 0;
     }
