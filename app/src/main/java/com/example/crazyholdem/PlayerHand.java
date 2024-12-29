@@ -18,6 +18,7 @@ public class PlayerHand {
     int numLowHand;
     int handStrength;
     ArrayList<Card> hand;
+    ArrayList<Card> scoringHand;
 
     // Default constructor
     public PlayerHand() {
@@ -64,55 +65,12 @@ public class PlayerHand {
 
     public void isHighCard(List<Card> hand) {
         highCard = true;
-        if(hand.get(0).getValue() > hand.get(1).getValue()){
-            numHighHand = hand.get(0).getValue();
-            numLowHand = hand.get(1).getValue();
-        }
-        else{
-            numHighHand = hand.get(1).getValue();
-            numLowHand = hand.get(0).getValue();
-        }
+
     }
     // Example hand evaluator (you would expand this)
-    public void isPair(List<Card> hand) {
-        if(hand.get(0) == hand.get(1)){
-            pair = true;
-            return;
-        }
-        for (int i = 0; i < Table.getCommuntiyCards().size(); i++) {
-            if (hand.get(0) == Table.getCommuntiyCards().get(i)){
-                pair = true;
-                numHighHand = hand.get(0).getValue();
-                return;
-            }
-            else if(hand.get(1) == Table.getCommuntiyCards().get(i)) {
-                pair = true;
-                numHighHand = hand.get(1).getValue();
-                return;
-            }
-        }
-    }
+    public void isPair(List<Card> hand){}
 
     public void isTwoPair(List<Card> hand) {
-        int pairCount = 0;
-        if(hand.get(0) == hand.get(1)){
-            pair = true;
-            pairCount++;
-        }
-
-        for (int i = 0; i < Table.getCommuntiyCards().size(); i++) {
-            if (hand.get(0) == Table.getCommuntiyCards().get(i)){
-                pair = true;
-                numHighHand = hand.get(0).getValue();
-                return;
-            }
-            else if(hand.get(1) == Table.getCommuntiyCards().get(i)) {
-                pair = true;
-                numHighHand = hand.get(1).getValue();
-                return;
-            }
-        }
-
     }
     public void clearHand(){
         hand.clear();

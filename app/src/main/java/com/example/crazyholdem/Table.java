@@ -77,34 +77,35 @@ public class Table {
             player.checkHand();
         }
         // Step 2: Sort players by hand strength
+        ArrayList<Player> winners = nonFoldedPlayers;
         Collections.sort(nonFoldedPlayers, (p1, p2) -> p2.playerHand.getHandStrength() - p1.playerHand.getHandStrength());
-        int highHand = nonFoldedPlayers.get(0).playerHand.handStrength;
-        ArrayList<Player> tiedPlayers = new ArrayList<Player>();
+        int handStrength = nonFoldedPlayers.get(0).playerHand.getHandStrength();
         for (int i = 0; i < nonFoldedPlayers.size(); i++) {
-            if (nonFoldedPlayers.get(i).playerHand.handStrength == highHand) {
-                tiedPlayers.add(nonFoldedPlayers.get(i));
+            if (nonFoldedPlayers.get(i).playerHand.getHandStrength() < handStrength) {
+                winners.remove(nonFoldedPlayers.get(i));
+            }
+        }
 
+        for (int i = 0 ; i < winners.size(); i++){
+            int curNum = 0;
+            for (Player player : winners) {
+                int value = player.playerHand.scoringHand.get(i).getValue();
+                if (value > curNum) {
+                    curNum = value;
+                }
+            }
+
+            for (Player player : winners){
+                if (player.playerHand.scoringHand.get(i).getValue() != curNum){
+                    winners.remove(player);
+                }
             }
         }
-        Collections.sort(tiedPlayers, (p1, p2) -> p2.playerHand.getNumHighHand() - p1.playerHand.getNumHighHand());
-        ArrayList<Player> twoTiedPlayers = new ArrayList<>();
-        for (int i = 0; i < tiedPlayers.size(); i++) {
-            if (tiedPlayers.get(i).playerHand.numHighHand == tiedPlayers.get(0).playerHand.numHighHand) {
-                twoTiedPlayers.add(tiedPlayers.get(i));
-            }
-        }
-        Collections.sort(twoTiedPlayers, (p1, p2) -> p2.playerHand.getNumLowHand() - p1.playerHand.getNumLowHand());
-        ArrayList<Player> winners = new ArrayList<>();
-        for (int i = 0; i < twoTiedPlayers.size(); i++) {
-            if (tiedPlayers.get(i).playerHand.getNumLowHand() == tiedPlayers.get(0).playerHand.getNumLowHand()) {
-                winners.add(twoTiedPlayers.get(i));
-            }
-        }
+
         for (Player winner : winners) {
             winner.setMoney(winner.money += pot / winners.size());
         }
-
     }
-public void startRound();
+//public void startRound();
 
 }
