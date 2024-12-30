@@ -6,7 +6,6 @@ public class Player {
 
     private String name;
     int money;
-    private ArrayList<Card> hand;
     private boolean isDealer;
     private boolean isAllIn;
     private boolean isFolded;
@@ -67,6 +66,9 @@ public class Player {
 
     public void checkHand(){
     //TODO: code logic for hand evaluation
+    }
+    public void showHand(){
+        System.out.println(playerHand.getHand());
     }
 
 }

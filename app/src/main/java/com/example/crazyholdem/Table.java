@@ -20,6 +20,15 @@ public class Table {
         stake = 0;
         nonFoldedPlayers = new ArrayList<>();
     }
+
+    public int getStake() {
+        return stake;
+    }
+
+    public void setStake(int stake) {
+        this.stake = stake;
+    }
+
     public enum HandType {
         ROYAL_FLUSH(11),
         STRAIGHT_FLUSH(10),
@@ -74,7 +83,7 @@ public class Table {
     }
     public void showdown(int pot) {
         for( Player player : nonFoldedPlayers){
-            player.checkHand();
+            player.playerHand.evaluateHand();
         }
         // Step 2: Sort players by hand strength
         ArrayList<Player> winners = nonFoldedPlayers;
@@ -86,26 +95,38 @@ public class Table {
             }
         }
 
-        for (int i = 0 ; i < winners.size(); i++){
-            HandType handType = HandType.HIGH_CARD;
-            for (Player player : winners) {
-                int value = player.playerHand.scoringHand.get(i).getValue();
-                if (value > handType.getStrength()) {
-                    handType.strength = value;
-                }
-            }
+        for (int i = 0; i < 5; i++) {
+            int maxValue = 0;
 
-            for (Player player : winners){
-                if (player.playerHand.scoringHand.get(i).getValue() != handStrength){
-                    winners.remove(player);
+            // Determine the maximum value for the current card position
+            for (Player player : winners) {
+                int cardValue = player.playerHand.scoringHand.get(i).getValue();
+                if (cardValue > maxValue) {
+                    maxValue = cardValue;
                 }
             }
+            // Create a new list for players with the maximum value
+            ArrayList<Player> filteredWinners = new ArrayList<>();
+            for (Player player : winners) {
+                if (player.playerHand.scoringHand.get(i).getValue() == maxValue) {
+                    filteredWinners.add(player);
+                }
+            }
+            winners = filteredWinners; // Update the winners list
         }
 
         for (Player winner : winners) {
+            winner.showHand();
             winner.setMoney(winner.money += pot / winners.size());
         }
-    }
-//public void startRound();
 
+    }
+    //public void startRound();
+    public void resetRound(){
+        standingBet = 0;
+        nonFoldedPlayers = players;
+        for (Player player : players) {
+            player.playerHand.resetHand();
+        }
+    }
 }

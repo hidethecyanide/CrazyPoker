@@ -14,9 +14,16 @@ public class PlayerHand {
     }
     //TODO: code logic for evaluation
     public boolean isHighCard(List<Card> hand) {
+        scoringHand.addAll(hand); // Add player's two cards
+        scoringHand.addAll(Table.communityCards); // Add community cards
+        // Sort the cards in descending order of value
+        scoringHand.sort((c1, c2) -> c2.getValue() - c1.getValue());
+        // Trim scoringHand to retain only the top 5 cards
+        while (scoringHand.size() > 5) {
+            scoringHand.remove(scoringHand.size() - 1); // Remove the smallest card
+        }
         return true;
     }
-    // Example hand evaluator (you would expand this)
     public boolean isPair(List<Card> hand) {
         return true;
     }
@@ -47,10 +54,6 @@ public class PlayerHand {
     public boolean isRoyalFlush(List<Card> hand) {
         return true;
     }
-
-    public void clearHand(){
-        hand.clear();
-    }
     public void addCardToHand(Card card){
         hand.add(card);
     }
@@ -68,34 +71,31 @@ public class PlayerHand {
         hand.clear();
         scoringHand.clear();
     }
-    public Table.HandType evaluateHand(){
-
-        Table.HandType handType = null;
-
+    public void evaluateHand(){
         if (isRoyalFlush(hand)) {
-            handType = Table.HandType.ROYAL_FLUSH;
+            setHandStrength(Table.HandType.ROYAL_FLUSH);
         } else if (isStraightFlush(hand)) {
-            handType = Table.HandType.STRAIGHT_FLUSH;
+            setHandStrength(Table.HandType.STRAIGHT_FLUSH);
         } else if (isFiveOfAKind(hand)) {
-            handType = Table.HandType.FIVE_KIND;
+            setHandStrength(Table.HandType.FIVE_KIND);
         } else if (isFourOfAKind(hand)) {
-            handType = Table.HandType.FOUR_KIND;
+            setHandStrength(Table.HandType.FOUR_KIND);
         } else if (isFullHouse(hand)) {
-            handType = Table.HandType.FULL_HOUSE;
+            setHandStrength(Table.HandType.FULL_HOUSE);
         } else if (isFlush(hand)) {
-            handType = Table.HandType.FLUSH;
+            setHandStrength(Table.HandType.FLUSH);
         } else if (isStraight(hand)) {
-            handType = Table.HandType.STRAIGHT;
+            setHandStrength(Table.HandType.STRAIGHT);
         } else if (isThreeOfAKind(hand)) {
-            handType = Table.HandType.THREE_KIND;
+            setHandStrength(Table.HandType.THREE_KIND);
         } else if (isTwoPair(hand)) {
-            handType = Table.HandType.TWO_PAIR;
+            setHandStrength(Table.HandType.TWO_PAIR);
         } else if (isPair(hand)) {
-            handType = Table.HandType.PAIR;
+            setHandStrength(Table.HandType.PAIR);
         } else if (isHighCard(hand)) {
-            handType = Table.HandType.HIGH_CARD;
+            setHandStrength(Table.HandType.HIGH_CARD);
         }
-        return handType;
+
     }
 
 }
