@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 public class PlayerHand {
 
-    int handStrength;
+    Table.HandType handType;
     ArrayList<Card> hand;
     ArrayList<Card> scoringHand;
 
     public PlayerHand() {
+        this.handType = null;
         this.hand = new ArrayList<>();
-        handStrength = 0;
     }
-
     //TODO: code logic for evaluation
     public boolean isHighCard(List<Card> hand) {
         return true;
@@ -45,7 +44,6 @@ public class PlayerHand {
     public boolean isStraightFlush(List<Card> hand) {
         return true;
     }
-
     public boolean isRoyalFlush(List<Card> hand) {
         return true;
     }
@@ -60,14 +58,13 @@ public class PlayerHand {
         return hand;
     }
     public int getHandStrength(){
-        return handStrength;
+        return handType.getStrength();
     }
-
-    public void setHandStrength(int handStrength){
-        this.handStrength = handStrength;
+    public void setHandStrength(Table.HandType handStrength){
+        this.handType = handStrength;
     }
     public void resetHand(){
-        handStrength = 0;
+        handType = null;
         hand.clear();
         scoringHand.clear();
     }
@@ -99,7 +96,6 @@ public class PlayerHand {
             handType = Table.HandType.HIGH_CARD;
         }
         return handType;
-        //TODO: update based on hand type
     }
 
 }
