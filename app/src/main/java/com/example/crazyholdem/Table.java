@@ -33,7 +33,7 @@ public class Table {
         PAIR(2),
         HIGH_CARD(1);
 
-        private final int strength;
+        private int strength;
 
         HandType(int strength) {
             this.strength = strength;
@@ -87,16 +87,16 @@ public class Table {
         }
 
         for (int i = 0 ; i < winners.size(); i++){
-            int curNum = 0;
+            HandType handType = HandType.HIGH_CARD;
             for (Player player : winners) {
                 int value = player.playerHand.scoringHand.get(i).getValue();
-                if (value > curNum) {
-                    curNum = value;
+                if (value > handType.getStrength()) {
+                    handType.strength = value;
                 }
             }
 
             for (Player player : winners){
-                if (player.playerHand.scoringHand.get(i).getValue() != curNum){
+                if (player.playerHand.scoringHand.get(i).getValue() != handStrength){
                     winners.remove(player);
                 }
             }

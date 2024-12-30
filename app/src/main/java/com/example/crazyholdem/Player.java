@@ -66,7 +66,7 @@ public class Player {
     }
 
     public void checkHand(){
-
+    //TODO: code logic for hand evaluation
     }
 
 }
