@@ -65,4 +65,8 @@ public class Player {
         this.isFolded = true;
     }
 
+    public void checkHand(){
+    //TODO: code logic for hand evaluation
+    }
+
 }

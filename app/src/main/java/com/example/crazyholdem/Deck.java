@@ -40,17 +40,14 @@ public class Deck {
     public Card getCardFromDeck(int index){
         return deck.get(index);
     }
-
     public void addJokers(int numberOfJokers){
         for (int i = 0; i < numberOfJokers; i++) {
             deck.add(new Card("joker", 0));
         }
     }
-
     public ArrayList<Card> getDeck() {
         return deck;
     }
-
     public void shuffleDeck(){
         Collections.shuffle(deck);
     }

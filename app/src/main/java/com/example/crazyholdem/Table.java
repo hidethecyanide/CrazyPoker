@@ -20,7 +20,6 @@ public class Table {
         stake = 0;
         nonFoldedPlayers = new ArrayList<>();
     }
-
     public enum HandType {
         ROYAL_FLUSH(11),
         STRAIGHT_FLUSH(10),
@@ -34,7 +33,7 @@ public class Table {
         PAIR(2),
         HIGH_CARD(1);
 
-        private final int strength;
+        private int strength;
 
         HandType(int strength) {
             this.strength = strength;
@@ -46,76 +45,67 @@ public class Table {
     }
     public void addPlayer(Player player) {
         players.add(player);
-        nonFoldedPlayers.add(player);
     }
-
     public void removePlayer(Player player) {
         players.remove(player);
     }
-
     public ArrayList<Player> getPlayers() {
         return players;
     }
-
-
     public int getStandingBet(){
         return standingBet;
     }
     public static ArrayList<Card> getCommuntiyCards(){
         return communityCards;
     }
-
     public void setStandingBet(int standingBet){
         this.standingBet = standingBet;
     }
-
     public void dealCard(Player player, int cardIndex) {
         player.playerHand.addCardToHand(deck.getDeck().get(cardIndex));
     }
-
     public void dealCommunityCards(int numberOfCards, int cardIndex) {
         for (int i = cardIndex; i < numberOfCards + cardIndex; i++) {
             communityCards.add(deck.getDeck().get(i));
         }
     }
-
     public void clearCommunityCards(){
         communityCards.clear();
     }
-
     public void showdown(int pot) {
         for( Player player : nonFoldedPlayers){
-            player.playerHand.updateHandStrength();
+            player.checkHand();
         }
         // Step 2: Sort players by hand strength
+        ArrayList<Player> winners = nonFoldedPlayers;
         Collections.sort(nonFoldedPlayers, (p1, p2) -> p2.playerHand.getHandStrength() - p1.playerHand.getHandStrength());
-        int highHand = nonFoldedPlayers.get(0).playerHand.handStrength;
-        ArrayList<Player> tiedPlayers = new ArrayList<Player>();
+        int handStrength = nonFoldedPlayers.get(0).playerHand.getHandStrength();
         for (int i = 0; i < nonFoldedPlayers.size(); i++) {
-            if (nonFoldedPlayers.get(i).playerHand.handStrength == highHand) {
-                tiedPlayers.add(nonFoldedPlayers.get(i));
+            if (nonFoldedPlayers.get(i).playerHand.getHandStrength() < handStrength) {
+                winners.remove(nonFoldedPlayers.get(i));
+            }
+        }
 
+        for (int i = 0 ; i < winners.size(); i++){
+            HandType handType = HandType.HIGH_CARD;
+            for (Player player : winners) {
+                int value = player.playerHand.scoringHand.get(i).getValue();
+                if (value > handType.getStrength()) {
+                    handType.strength = value;
+                }
+            }
+
+            for (Player player : winners){
+                if (player.playerHand.scoringHand.get(i).getValue() != handStrength){
+                    winners.remove(player);
+                }
             }
         }
-        Collections.sort(tiedPlayers, (p1, p2) -> p2.playerHand.getNumHighHand() - p1.playerHand.getNumHighHand());
-        ArrayList<Player> twoTiedPlayers = new ArrayList<>();
-        for (int i = 0; i < tiedPlayers.size(); i++) {
-            if (tiedPlayers.get(i).playerHand.numHighHand == tiedPlayers.get(0).playerHand.numHighHand) {
-                twoTiedPlayers.add(tiedPlayers.get(i));
-            }
-        }
-        Collections.sort(twoTiedPlayers, (p1, p2) -> p2.playerHand.getNumLowHand() - p1.playerHand.getNumLowHand());
-        ArrayList<Player> winners = new ArrayList<>();
-        for (int i = 0; i < twoTiedPlayers.size(); i++) {
-            if (tiedPlayers.get(i).playerHand.getNumLowHand() == tiedPlayers.get(0).playerHand.getNumLowHand()) {
-                winners.add(twoTiedPlayers.get(i));
-            }
-        }
+
         for (Player winner : winners) {
             winner.setMoney(winner.money += pot / winners.size());
         }
-
     }
-
+//public void startRound();
 
 }
