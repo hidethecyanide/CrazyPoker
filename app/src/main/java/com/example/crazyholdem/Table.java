@@ -87,11 +87,11 @@ public class Table {
         }
         // Step 2: Sort players by hand strength
         ArrayList<Player> winners = nonFoldedPlayers;
-        Collections.sort(nonFoldedPlayers, (p1, p2) -> p2.playerHand.getHandStrength() - p1.playerHand.getHandStrength());
-        int handStrength = nonFoldedPlayers.get(0).playerHand.getHandStrength();
-        for (int i = 0; i < nonFoldedPlayers.size(); i++) {
-            if (nonFoldedPlayers.get(i).playerHand.getHandStrength() < handStrength) {
-                winners.remove(nonFoldedPlayers.get(i));
+        Collections.sort(winners, (p1, p2) -> p2.playerHand.getHandStrength() - p1.playerHand.getHandStrength());
+        int handStrength = winners.get(0).playerHand.getHandStrength();
+        for (Player player : winners) {
+            if (player.playerHand.getHandStrength() != handStrength) {
+                winners.remove(player);
             }
         }
 

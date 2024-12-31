@@ -11,9 +11,11 @@ public class PlayerHand {
     public PlayerHand() {
         this.handType = null;
         this.hand = new ArrayList<>();
+        this.scoringHand = new ArrayList<>();
     }
     //TODO: code logic for evaluation
     public boolean isHighCard(List<Card> hand) {
+        scoringHand.clear();
         scoringHand.addAll(hand); // Add player's two cards
         scoringHand.addAll(Table.communityCards); // Add community cards
         // Sort the cards in descending order of value
@@ -24,9 +26,46 @@ public class PlayerHand {
         }
         return true;
     }
+
     public boolean isPair(List<Card> hand) {
-        return true;
+        // Combine the player's hand and community cards
+        scoringHand.clear();
+        scoringHand.addAll(hand); // Add player's two cards
+        scoringHand.addAll(Table.communityCards);
+
+        // Sort the cards in descending order of value
+        scoringHand.sort((c1, c2) -> c2.getValue() - c1.getValue());
+
+        // Check for a pair
+        for (int i = 0; i < scoringHand.size() - 1; i++) {
+            if (scoringHand.get(i).getValue() == scoringHand.get(i + 1).getValue()) {
+                // Pair found: Extract the pair
+                Card card1 = scoringHand.get(i);
+                Card card2 = scoringHand.get(i + 1);
+
+                // Reorganize scoringHand
+                List<Card> frontPair = new ArrayList<>();
+                frontPair.add(card1);
+                frontPair.add(card2);
+
+                // Add the highest remaining cards
+                for (int j = 0; j < scoringHand.size(); j++) {
+                    if (j != i && j != i + 1 && frontPair.size() < 5) {
+                        frontPair.add(scoringHand.get(j));
+                    }
+                }
+
+                // Update scoringHand
+                scoringHand.clear();
+                scoringHand.addAll(frontPair);
+
+                return true;
+            }
+        }
+        // No pair found
+        return false;
     }
+
     public boolean isTwoPair(List<Card> hand) {
         return true;
     }

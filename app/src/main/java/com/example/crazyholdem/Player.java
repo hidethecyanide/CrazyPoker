@@ -64,9 +64,6 @@ public class Player {
         this.isFolded = true;
     }
 
-    public void checkHand(){
-    //TODO: code logic for hand evaluation
-    }
     public void showHand(){
         System.out.println(playerHand.getHand());
     }
