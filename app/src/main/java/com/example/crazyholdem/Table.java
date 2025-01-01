@@ -15,10 +15,21 @@ public class Table {
     public Table() {
         players = new ArrayList<>();
         deck = new Deck();
+        deck.createDeck();
+        deck.shuffleDeck();
         standingBet = 0;
         communityCards = new ArrayList<>();
         stake = 0;
         nonFoldedPlayers = new ArrayList<>();
+    }
+    public Deck getDeck() {
+        return deck;
+    }
+    public int getStake() {
+        return stake;
+    }
+    public void setStake(int stake) {
+        this.stake = stake;
     }
     public enum HandType {
         ROYAL_FLUSH(11),
@@ -55,57 +66,77 @@ public class Table {
     public int getStandingBet(){
         return standingBet;
     }
-    public static ArrayList<Card> getCommuntiyCards(){
-        return communityCards;
-    }
     public void setStandingBet(int standingBet){
         this.standingBet = standingBet;
     }
-    public void dealCard(Player player, int cardIndex) {
-        player.playerHand.addCardToHand(deck.getDeck().get(cardIndex));
+    public void dealCard(Player player, Card card) {
+        player.playerHand.addCardToHand(card);
     }
-    public void dealCommunityCards(int numberOfCards, int cardIndex) {
-        for (int i = cardIndex; i < numberOfCards + cardIndex; i++) {
+    public void dealCommunityCards(int numberOfCards) {
+
+        int start = deck.getCurrentCard();
+        int end = start + numberOfCards;
+
+        if (end > deck.getDeck().size()) {
+            throw new IllegalStateException("Not enough cards remaining in the deck");
+        }
+
+        for (int i = start; i < end; i++) {
             communityCards.add(deck.getDeck().get(i));
         }
+        deck.setCurrentCard(end);
     }
     public void clearCommunityCards(){
         communityCards.clear();
     }
     public void showdown(int pot) {
         for( Player player : nonFoldedPlayers){
-            player.checkHand();
+            player.playerHand.evaluateHand();
         }
         // Step 2: Sort players by hand strength
         ArrayList<Player> winners = nonFoldedPlayers;
-        Collections.sort(nonFoldedPlayers, (p1, p2) -> p2.playerHand.getHandStrength() - p1.playerHand.getHandStrength());
-        int handStrength = nonFoldedPlayers.get(0).playerHand.getHandStrength();
-        for (int i = 0; i < nonFoldedPlayers.size(); i++) {
-            if (nonFoldedPlayers.get(i).playerHand.getHandStrength() < handStrength) {
-                winners.remove(nonFoldedPlayers.get(i));
+        Collections.sort(winners, (p1, p2) -> p2.playerHand.getHandStrength() - p1.playerHand.getHandStrength());
+        int handStrength = winners.get(0).playerHand.getHandStrength();
+        for (Player player : winners) {
+            if (player.playerHand.getHandStrength() != handStrength) {
+                winners.remove(player);
             }
         }
 
-        for (int i = 0 ; i < winners.size(); i++){
-            HandType handType = HandType.HIGH_CARD;
-            for (Player player : winners) {
-                int value = player.playerHand.scoringHand.get(i).getValue();
-                if (value > handType.getStrength()) {
-                    handType.strength = value;
-                }
-            }
+        for (int i = 0; i < 5; i++) {
+            int maxValue = 0;
 
-            for (Player player : winners){
-                if (player.playerHand.scoringHand.get(i).getValue() != handStrength){
-                    winners.remove(player);
+            // Determine the maximum value for the current card position
+            for (Player player : winners) {
+                int cardValue = player.playerHand.scoringHand.get(i).getValue();
+                if (cardValue > maxValue) {
+                    maxValue = cardValue;
                 }
             }
+            // Create a new list for players with the maximum value
+            ArrayList<Player> filteredWinners = new ArrayList<>();
+            for (Player player : winners) {
+                if (player.playerHand.scoringHand.get(i).getValue() == maxValue) {
+                    filteredWinners.add(player);
+                }
+            }
+            winners = filteredWinners; // Update the winners list
         }
 
         for (Player winner : winners) {
+            winner.showHand();
             winner.setMoney(winner.money += pot / winners.size());
         }
-    }
-//public void startRound();
 
+    }
+    //public void startRound();
+    public void resetRound(){
+        deck.resetDeck();
+        communityCards.clear();
+        standingBet = 0;
+        nonFoldedPlayers = players;
+        for (Player player : players) {
+            player.playerHand.resetHand();
+        }
+    }
 }

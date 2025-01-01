@@ -5,15 +5,15 @@ import java.util.Collections;
 
 public class Deck {
 
-    private final ArrayList<Card> deck;
+    private ArrayList<Card> deck;
     private int numberOfJokers;
     private int numberOfCards;
     private int currentCard;
 
     public Deck() {
         deck = new ArrayList<>();
+        currentCard = 0;
     }
-
     public void createDeck(){
         for (String suit : new String[]{"hearts", "diamonds", "clubs", "spades"}) {
             for (int j = 2; j < 15; j++) {
@@ -50,5 +50,9 @@ public class Deck {
     }
     public void shuffleDeck(){
         Collections.shuffle(deck);
+    }
+    public void resetDeck() {
+        currentCard = 0;
+        shuffleDeck();
     }
 }
