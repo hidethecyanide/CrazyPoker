@@ -15,20 +15,22 @@ public class Table {
     public Table() {
         players = new ArrayList<>();
         deck = new Deck();
+        deck.createDeck();
+        deck.shuffleDeck();
         standingBet = 0;
         communityCards = new ArrayList<>();
         stake = 0;
         nonFoldedPlayers = new ArrayList<>();
     }
-
+    public Deck getDeck() {
+        return deck;
+    }
     public int getStake() {
         return stake;
     }
-
     public void setStake(int stake) {
         this.stake = stake;
     }
-
     public enum HandType {
         ROYAL_FLUSH(11),
         STRAIGHT_FLUSH(10),
@@ -64,19 +66,25 @@ public class Table {
     public int getStandingBet(){
         return standingBet;
     }
-    public static ArrayList<Card> getCommuntiyCards(){
-        return communityCards;
-    }
     public void setStandingBet(int standingBet){
         this.standingBet = standingBet;
     }
-    public void dealCard(Player player, int cardIndex) {
-        player.playerHand.addCardToHand(deck.getDeck().get(cardIndex));
+    public void dealCard(Player player, Card card) {
+        player.playerHand.addCardToHand(card);
     }
-    public void dealCommunityCards(int numberOfCards, int cardIndex) {
-        for (int i = cardIndex; i < numberOfCards + cardIndex; i++) {
+    public void dealCommunityCards(int numberOfCards) {
+
+        int start = deck.getCurrentCard();
+        int end = start + numberOfCards;
+
+        if (end > deck.getDeck().size()) {
+            throw new IllegalStateException("Not enough cards remaining in the deck");
+        }
+
+        for (int i = start; i < end; i++) {
             communityCards.add(deck.getDeck().get(i));
         }
+        deck.setCurrentCard(end);
     }
     public void clearCommunityCards(){
         communityCards.clear();
@@ -123,6 +131,8 @@ public class Table {
     }
     //public void startRound();
     public void resetRound(){
+        deck.resetDeck();
+        communityCards.clear();
         standingBet = 0;
         nonFoldedPlayers = players;
         for (Player player : players) {
