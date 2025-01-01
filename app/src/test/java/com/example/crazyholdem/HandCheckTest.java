@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class HandCheckTest {
@@ -27,7 +28,7 @@ public class HandCheckTest {
 
         // Add specific cards to the player's hand to ensure a pair
         player1.playerHand.addCardToHand(new Card("Hearts", 3));
-        player1.playerHand.addCardToHand(new Card("Diamonds", 2));
+        player1.playerHand.addCardToHand(new Card("Diamonds", 3));
 
         // Test if a pair is correctly identified
         assertTrue("Player's hand should contain a pair",
@@ -44,5 +45,18 @@ public class HandCheckTest {
         assertEquals("Current card should be 0", 0, table.getDeck().getCurrentCard());
     }
 
+    @Ignore
+    public void threeKindRecognition() {
+        // Set up a player and deal community cards
+        Player player1 = new Player("Player 1", 100);
+        table.dealCommunityCards(5); // Assuming table manages community cards
 
+        // Add specific cards to the player's hand to ensure a pair
+        player1.playerHand.addCardToHand(new Card("Hearts", 3));
+        player1.playerHand.addCardToHand(new Card("Diamonds", 2));
+
+        // Test if a pair is correctly identified
+        assertTrue("Player's hand should contain a pair",
+                player1.playerHand.isPair(player1.playerHand.getHand()));
+    }
 }
