@@ -81,7 +81,7 @@ public class PlayerHand {
         for (int i = 0; i < scoringHand.size() - 2; i++) {
             if ((scoringHand.get(i).getValue() == scoringHand.get(i + 1).getValue()) &&
                     scoringHand.get(i).getValue() == scoringHand.get(i + 2).getValue()) {
-                // Pair found: Extract the pair
+                // Three of a kind found
                 Card card1 = scoringHand.get(i);
                 Card card2 = scoringHand.get(i + 1);
                 Card card3 = scoringHand.get(i + 2);
@@ -113,12 +113,129 @@ public class PlayerHand {
         return false;
     }
     public boolean isFlush(List<Card> hand) {
+        scoringHand.clear();
+        scoringHand.addAll(hand); // Add player's two cards
+        scoringHand.addAll(Table.communityCards);
+        scoringHand.sort((c1, c2) -> c2.getValue() - c1.getValue());
+        int numOfSpades = 0;
+        int numOfHearts = 0;
+        int numOfClubs = 0;
+        int numOfDiamonds = 0;
+        for(Card card : scoringHand){
+            if(card.suit.equals("Spades")){
+                numOfSpades++;
+            }
+            else if(card.suit.equals("Hearts")){
+                numOfHearts++;
+                }
+            else if(card.suit.equals("Clubs")){
+                numOfClubs++;
+            }
+            else if(card.suit.equals("Diamonds")){
+                numOfDiamonds++;
+            }
+        }
+        if(numOfSpades >= 5 || numOfHearts >= 5 || numOfClubs >= 5 || numOfDiamonds >= 5){
+            ArrayList<Card> flush = new ArrayList<>();
+            if(numOfSpades >= 5) {
+                for (Card card : scoringHand) {
+                    if (card.suit.equals("Spades") && flush.size() <= 5) {
+                        flush.add(card);
+                    }
+                }
+                scoringHand=flush;
+                return true;
+            }
+            else if(numOfHearts >= 5) {
+                for (Card card : scoringHand) {
+                    if (card.suit.equals("Hearts") && flush.size() <= 5) {
+                        flush.add(card);
+                    }
+                }
+                scoringHand=flush;
+                return true;
+            }
+            else if(numOfClubs >= 5) {
+                for (Card card : scoringHand) {
+                    if (card.suit.equals("Clubs") && flush.size() <= 5) {
+                        flush.add(card);
+                    }
+                }
+                scoringHand=flush;
+                return true;
+            }
+            else {
+                for (Card card : scoringHand) {
+                    if (card.suit.equals("Diamonds") && flush.size() <= 5) {
+                        flush.add(card);
+                    }
+                }
+                scoringHand=flush;
+                return true;
+            }
+        }
         return false;
     }
     public boolean isFullHouse(List<Card> hand) {
+      /*  scoringHand.clear();
+        int pairValue;
+        int threeOfAKindValue;
+        if(isPair(hand)){
+            pairValue = scoringHand.get(0).getValue();
+        }
+        else {
+            return false;
+        }
+        if(isThreeOfAKind(hand)) {
+            threeOfAKindValue = scoringHand.get(0).getValue();
+        }
+        else{
+            return false;
+        }
+        if(pairValue == threeOfAKindValue){
+            return true;
+        } */
         return false;
     }
     public boolean isFourOfAKind(List<Card> hand) {
+        scoringHand.clear();
+        scoringHand.addAll(hand); // Add player's two cards
+        scoringHand.addAll(Table.communityCards);
+
+        // Sort the cards in descending order of value
+        scoringHand.sort((c1, c2) -> c2.getValue() - c1.getValue());
+
+        // Check for a three of a kind
+        for (int i = 0; i < scoringHand.size() - 3; i++) {
+            if ((scoringHand.get(i).getValue() == scoringHand.get(i + 1).getValue()) &&
+                    (scoringHand.get(i).getValue() == scoringHand.get(i + 2).getValue()) &&
+                        (scoringHand.get(i).getValue() == scoringHand.get(i + 3).getValue())){
+                // Four of a kind found
+                Card card1 = scoringHand.get(i);
+                Card card2 = scoringHand.get(i + 1);
+                Card card3 = scoringHand.get(i + 2);
+                Card card4 = scoringHand.get(i + 3);
+
+                // Reorganize scoringHand
+                List<Card> frontFour = new ArrayList<>();
+                frontFour.add(card1);
+                frontFour.add(card2);
+                frontFour.add(card3);
+                frontFour.add(card4);
+
+                // Add the highest remaining cards
+                for (int j = 0; j < scoringHand.size(); j++) {
+                    if (j != i && j != i + 1 && j != i + 2 && j != i + 3 && frontFour.size() < 5) {
+                        frontFour.add(scoringHand.get(j));
+                    }
+                }
+                // Update scoringHand
+                scoringHand.clear();
+                scoringHand.addAll(frontFour);
+
+                return true;
+            }
+        }
         return false;
     }
     public boolean isFiveOfAKind(List<Card> hand) {
