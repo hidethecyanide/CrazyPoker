@@ -67,31 +67,68 @@ public class PlayerHand {
     }
 
     public boolean isTwoPair(List<Card> hand) {
-        return true;
+        return false;
     }
     public boolean isThreeOfAKind(List<Card> hand) {
-        return true;
+        scoringHand.clear();
+        scoringHand.addAll(hand); // Add player's two cards
+        scoringHand.addAll(Table.communityCards);
+
+        // Sort the cards in descending order of value
+        scoringHand.sort((c1, c2) -> c2.getValue() - c1.getValue());
+
+        // Check for a three of a kind
+        for (int i = 0; i < scoringHand.size() - 2; i++) {
+            if ((scoringHand.get(i).getValue() == scoringHand.get(i + 1).getValue()) &&
+                    scoringHand.get(i).getValue() == scoringHand.get(i + 2).getValue()) {
+                // Pair found: Extract the pair
+                Card card1 = scoringHand.get(i);
+                Card card2 = scoringHand.get(i + 1);
+                Card card3 = scoringHand.get(i + 2);
+
+                // Reorganize scoringHand
+                List<Card> frontThree = new ArrayList<>();
+                frontThree.add(card1);
+                frontThree.add(card2);
+                frontThree.add(card3);
+
+
+                // Add the highest remaining cards
+                for (int j = 0; j < scoringHand.size(); j++) {
+                    if (j != i && j != i + 1 && j != i + 2 && frontThree.size() < 5) {
+                        frontThree.add(scoringHand.get(j));
+                    }
+                }
+
+                // Update scoringHand
+                scoringHand.clear();
+                scoringHand.addAll(frontThree);
+
+                return true;
+            }
+        }
+        return false;
     }
     public boolean isStraight(List<Card> hand) {
-        return true;
+        return false;
     }
     public boolean isFlush(List<Card> hand) {
-        return true;
+        return false;
     }
     public boolean isFullHouse(List<Card> hand) {
-        return true;
+        return false;
     }
     public boolean isFourOfAKind(List<Card> hand) {
-        return true;
+        return false;
     }
     public boolean isFiveOfAKind(List<Card> hand) {
-        return true;
+        return false;
     }
     public boolean isStraightFlush(List<Card> hand) {
-        return true;
+        return false;
     }
     public boolean isRoyalFlush(List<Card> hand) {
-        return true;
+        return false;
     }
     public void addCardToHand(Card card){
         hand.add(card);

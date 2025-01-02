@@ -27,8 +27,8 @@ public class HandCheckTest {
         table.dealCommunityCards(5); // Assuming table manages community cards
 
         // Add specific cards to the player's hand to ensure a pair
-        player1.playerHand.addCardToHand(new Card("Hearts", 3));
-        player1.playerHand.addCardToHand(new Card("Diamonds", 3));
+        table.dealCard(player1, new Card("Hearts", 3));
+        table.dealCard(player1, new Card("Diamonds", 3));
 
         // Test if a pair is correctly identified
         assertTrue("Player's hand should contain a pair",
@@ -45,18 +45,26 @@ public class HandCheckTest {
         assertEquals("Current card should be 0", 0, table.getDeck().getCurrentCard());
     }
 
-    @Ignore
+    //TODO: check contents of arrays
+    @Test
     public void threeKindRecognition() {
         // Set up a player and deal community cards
         Player player1 = new Player("Player 1", 100);
-        table.dealCommunityCards(5); // Assuming table manages community cards
+
+        Table.communityCards.add(new Card("Clubs",2));
+        Table.communityCards.add(new Card("Hearts",5));
+        Table.communityCards.add(new Card("Diamonds",3));
+        Table.communityCards.add(new Card("Clubs",5));
+        Table.communityCards.add(new Card("Spades",5));
 
         // Add specific cards to the player's hand to ensure a pair
-        player1.playerHand.addCardToHand(new Card("Hearts", 3));
-        player1.playerHand.addCardToHand(new Card("Diamonds", 2));
+        table.dealCard(player1, new Card("Hearts", 3));
+        table.dealCard(player1, new Card("Diamonds", 3));
 
         // Test if a pair is correctly identified
-        assertTrue("Player's hand should contain a pair",
-                player1.playerHand.isPair(player1.playerHand.getHand()));
+        assertTrue("Player's hand should contain a three of a kind",
+                player1.playerHand.isThreeOfAKind(player1.playerHand.getHand()));
     }
+
+
 }

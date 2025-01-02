@@ -56,6 +56,7 @@ public class Table {
     }
     public void addPlayer(Player player) {
         players.add(player);
+
     }
     public void removePlayer(Player player) {
         players.remove(player);
@@ -86,10 +87,15 @@ public class Table {
         }
         deck.setCurrentCard(end);
     }
+
     public void clearCommunityCards(){
         communityCards.clear();
     }
     public void showdown(int pot) {
+        //TODO: code all-in clauses
+        if (nonFoldedPlayers.isEmpty()) {
+            throw new IllegalStateException("No players to evaluate during showdown.");
+        }
         for( Player player : nonFoldedPlayers){
             player.playerHand.evaluateHand();
         }
@@ -97,11 +103,8 @@ public class Table {
         ArrayList<Player> winners = nonFoldedPlayers;
         Collections.sort(winners, (p1, p2) -> p2.playerHand.getHandStrength() - p1.playerHand.getHandStrength());
         int handStrength = winners.get(0).playerHand.getHandStrength();
-        for (Player player : winners) {
-            if (player.playerHand.getHandStrength() != handStrength) {
-                winners.remove(player);
-            }
-        }
+        winners.removeIf(player -> player.playerHand.getHandStrength() != handStrength);
+
 
         for (int i = 0; i < 5; i++) {
             int maxValue = 0;
@@ -128,12 +131,17 @@ public class Table {
             winner.setMoney(winner.money += pot / winners.size());
         }
 
+        for (Player player : winners) {
+            System.out.println(player.getName() + " has won " + pot / winners.size());
+        }
+
     }
     //public void startRound();
     public void resetRound(){
         deck.resetDeck();
-        communityCards.clear();
+        clearCommunityCards();
         standingBet = 0;
+        nonFoldedPlayers.clear();
         nonFoldedPlayers = players;
         for (Player player : players) {
             player.playerHand.resetHand();
