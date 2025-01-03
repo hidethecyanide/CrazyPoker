@@ -74,6 +74,7 @@ public class PlayerHand {
             scoringHand.addAll(Table.communityCards);
             scoringHand.sort((c1, c2) -> c2.getValue() - c1.getValue());
             boolean secondPair = false;
+            int k = 0;
             for (int i = 0; i < scoringHand.size() - 1; i++) {
                 if (scoringHand.get(i).getValue() == scoringHand.get(i + 1).getValue()) {
                     if (secondPair) {
@@ -87,7 +88,7 @@ public class PlayerHand {
                         frontPair.add(card1);
                         frontPair.add(card2);
                         for (int j = 0; j < scoringHand.size(); j++) {
-                            if (j != 0 && j != 1 && j != i && j != i + 1 && frontPair.size() < 5) {
+                            if (j != k && j != k+1 && j != i && j != i + 1 && frontPair.size() < 5) {
                                 frontPair.add(scoringHand.get(j));
                             }
                         }
@@ -100,6 +101,7 @@ public class PlayerHand {
                         return true;
                     } else {
                         secondPair = true;
+                        k=i;
                         i++;
                     }
                 }
