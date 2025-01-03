@@ -58,7 +58,6 @@ public class PlayerHand {
                 // Update scoringHand
                 scoringHand.clear();
                 scoringHand.addAll(frontPair);
-
                 return true;
             }
         }
@@ -67,6 +66,45 @@ public class PlayerHand {
     }
 
     public boolean isTwoPair(List<Card> hand) {
+        if(isPair(hand)) {
+            Card highPair2 = scoringHand.get(0);
+            Card highPair1 = scoringHand.get(1);
+            scoringHand.clear();
+            scoringHand.addAll(hand); // Add player's two cards
+            scoringHand.addAll(Table.communityCards);
+            scoringHand.sort((c1, c2) -> c2.getValue() - c1.getValue());
+            boolean secondPair = false;
+            for (int i = 0; i < scoringHand.size() - 1; i++) {
+                if (scoringHand.get(i).getValue() == scoringHand.get(i + 1).getValue()) {
+                    if (secondPair) {
+                        Card card1 = scoringHand.get(i);
+                        Card card2 = scoringHand.get(i + 1);
+
+                        // Reorganize scoringHand
+                        List<Card> frontPair = new ArrayList<>();
+                        frontPair.add(highPair1);
+                        frontPair.add(highPair2);
+                        frontPair.add(card1);
+                        frontPair.add(card2);
+                        for (int j = 0; j < scoringHand.size(); j++) {
+                            if (j != 0 && j != 1 && j != i && j != i + 1 && frontPair.size() < 5) {
+                                frontPair.add(scoringHand.get(j));
+                            }
+                        }
+                        scoringHand.clear();
+                        scoringHand.addAll(frontPair);
+                        System.out.println("Two pair");
+                        for(Card card : scoringHand){
+                            System.out.println(card.toString());
+                        }
+                        return true;
+                    } else {
+                        secondPair = true;
+                        i++;
+                    }
+                }
+            }
+        }
         return false;
     }
     public boolean isThreeOfAKind(List<Card> hand) {
@@ -103,7 +141,10 @@ public class PlayerHand {
                 // Update scoringHand
                 scoringHand.clear();
                 scoringHand.addAll(frontThree);
-
+                System.out.println("Three of a kind");
+                for(Card card : scoringHand){
+                    System.out.println(card.toString());
+                }
                 return true;
             }
         }
@@ -122,17 +163,19 @@ public class PlayerHand {
         int numOfClubs = 0;
         int numOfDiamonds = 0;
         for(Card card : scoringHand){
-            if(card.suit.equals("Spades")){
-                numOfSpades++;
-            }
-            else if(card.suit.equals("Hearts")){
-                numOfHearts++;
-                }
-            else if(card.suit.equals("Clubs")){
-                numOfClubs++;
-            }
-            else if(card.suit.equals("Diamonds")){
-                numOfDiamonds++;
+            switch (card.suit) {
+                case "Spades":
+                    numOfSpades++;
+                    break;
+                case "Hearts":
+                    numOfHearts++;
+                    break;
+                case "Clubs":
+                    numOfClubs++;
+                    break;
+                case "Diamonds":
+                    numOfDiamonds++;
+                    break;
             }
         }
         if(numOfSpades >= 5 || numOfHearts >= 5 || numOfClubs >= 5 || numOfDiamonds >= 5){
@@ -144,6 +187,10 @@ public class PlayerHand {
                     }
                 }
                 scoringHand=flush;
+                System.out.println("Flush");
+                for(Card card : scoringHand){
+                    System.out.println(card.toString());
+                }
                 return true;
             }
             else if(numOfHearts >= 5) {
@@ -153,6 +200,10 @@ public class PlayerHand {
                     }
                 }
                 scoringHand=flush;
+                System.out.println("Flush");
+                for(Card card : scoringHand){
+                    System.out.println(card.toString());
+                }
                 return true;
             }
             else if(numOfClubs >= 5) {
@@ -162,6 +213,10 @@ public class PlayerHand {
                     }
                 }
                 scoringHand=flush;
+                System.out.println("Flush");
+                for(Card card : scoringHand){
+                    System.out.println(card.toString());
+                }
                 return true;
             }
             else {
@@ -171,6 +226,10 @@ public class PlayerHand {
                     }
                 }
                 scoringHand=flush;
+                System.out.println("Flush");
+                for(Card card : scoringHand){
+                    System.out.println(card.toString());
+                }
                 return true;
             }
         }
@@ -232,6 +291,10 @@ public class PlayerHand {
                 // Update scoringHand
                 scoringHand.clear();
                 scoringHand.addAll(frontFour);
+                System.out.println("Four of a kind");
+                for(Card card : scoringHand){
+                    System.out.println(card.toString());
+                }
 
                 return true;
             }

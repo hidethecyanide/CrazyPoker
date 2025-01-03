@@ -15,7 +15,7 @@ public class Deck {
         currentCard = 0;
     }
     public void createDeck(){
-        for (String suit : new String[]{"hearts", "diamonds", "clubs", "spades"}) {
+        for (String suit : new String[]{"Hearts", "Diamonds", "Clubs", "Spades"}) {
             for (int j = 2; j < 15; j++) {
                 deck.add(new Card(suit, j));
 

@@ -51,15 +51,15 @@ public class HandCheckTest {
         // Set up a player and deal community cards
         Player player1 = new Player("Player 1", 100);
 
-        Table.communityCards.add(new Card("Clubs",2));
+        Table.communityCards.add(new Card("Clubs",13));
         Table.communityCards.add(new Card("Hearts",5));
         Table.communityCards.add(new Card("Diamonds",3));
-        Table.communityCards.add(new Card("Clubs",5));
+        Table.communityCards.add(new Card("Clubs",4));
         Table.communityCards.add(new Card("Spades",5));
 
         // Add specific cards to the player's hand to ensure a pair
-        table.dealCard(player1, new Card("Hearts", 3));
-        table.dealCard(player1, new Card("Diamonds", 3));
+        table.dealCard(player1, new Card("Hearts", 5));
+        table.dealCard(player1, new Card("Diamonds", 12));
 
         // Test if a pair is correctly identified
         assertTrue("Player's hand should contain a three of a kind",
@@ -104,6 +104,28 @@ public class HandCheckTest {
         // Test if a pair is correctly identified
         assertTrue("Player's hand should contain a flush",
                 player1.playerHand.isFlush(player1.playerHand.getHand()));
+    }
+
+    @Test
+    public void twoPairRecognition() {
+        // Set up a player and deal community cards
+        Player player1 = new Player("Player 1", 100);
+
+        Table.communityCards.add(new Card("Clubs",2));
+        Table.communityCards.add(new Card("Hearts",8));
+        Table.communityCards.add(new Card("Diamonds",3));
+        Table.communityCards.add(new Card("Spades",3));
+        Table.communityCards.add(new Card("Hearts",12));
+
+        // Add specific cards to the player's hand to ensure a pair
+        table.dealCard(player1, new Card("Hearts", 11));
+        table.dealCard(player1, new Card("Hearts", 12));
+
+
+
+        // Test if a pair is correctly identified
+        assertTrue("Player's hand should contain a two pair",
+                player1.playerHand.isTwoPair(player1.playerHand.getHand()));
     }
 
 
