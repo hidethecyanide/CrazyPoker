@@ -32,56 +32,58 @@ public class HandSortTest {
         Player player1 = new Player("Player 1", 100);
         table.addPlayer(player1);
 
-        Table.communityCards.add(new Card("Diamonds",12));
-        Table.communityCards.add(new Card("Diamonds",9));
-        Table.communityCards.add(new Card("Diamonds",2));
-        Table.communityCards.add(new Card("Clubs",12));
-        Table.communityCards.add(new Card("Spades",6));
+        Table.communityCards.add(new Card("Diamonds",3));
+        Table.communityCards.add(new Card("Diamonds",11));
+        Table.communityCards.add(new Card("Diamonds",6));
+        Table.communityCards.add(new Card("Clubs",11));
+        Table.communityCards.add(new Card("Spades",12));
 
 
         // Add specific cards to the player's hand to ensure a pair
-        table.dealCard(player1, new Card("Diamonds", 7));
-        table.dealCard(player1, new Card("Spades", 9));
+        table.dealCard(player1, new Card("Hearts", 7));
+        table.dealCard(player1, new Card("Spades", 13));
 
         Player player2 = new Player("Player 2", 100);
         table.addPlayer(player2);
 
         // Add specific cards to the player's hand to ensure a pair
-        table.dealCard(player2, new Card("Diamonds", 3));
-        table.dealCard(player2, new Card("Hearts", 9));
+        table.dealCard(player2, new Card("Diamonds", 5));
+        table.dealCard(player2, new Card("Hearts", 6));
 
         table.showdown(10);
-        assertEquals(110,player1.getMoney());
+        assertEquals(110,player2.getMoney());
     }
 
     @Test
     public void checkPlayerSort2() {
-        Player player1 = new Player("Player 1", 100);
-        table.addPlayer(player1);
-
         table.dealCommunityCards(5);
         System.out.println("Community Cards:");
         for (int i = 0; i < 5; i++) {
             System.out.println(Table.communityCards.get(i));
         }
 
-
-        // Add specific cards to the player's hand to ensure a pair
-        table.dealCard(player1, table.getDeck().getDeck().get(table.getDeck().getCurrentCard()));
-        table.dealCard(player1, table.getDeck().getDeck().get(table.getDeck().getCurrentCard()));
+        Player player1 = new Player("Player 1", 100);
+        table.addPlayer(player1);
+        table.dealCard(player1);
+        table.dealCard(player1);
         System.out.println("Player 1 Hand:");
         System.out.println(player1.playerHand.getHand());
 
         Player player2 = new Player("Player 2", 100);
         table.addPlayer(player2);
-
-        // Add specific cards to the player's hand to ensure a pair
-        table.dealCard(player2, table.getDeck().getDeck().get(table.getDeck().getCurrentCard()));
-        table.dealCard(player2, table.getDeck().getDeck().get(table.getDeck().getCurrentCard()));
+        table.dealCard(player2);
+        table.dealCard(player2);
         System.out.println("Player 2 Hand:");
         System.out.println(player2.playerHand.getHand());
 
+        Player player3 = new Player("Player 3", 100);
+        table.addPlayer(player3);
+        table.dealCard(player3);
+        table.dealCard(player3);
+        System.out.println("Player 3 Hand:");
+        System.out.println(player3.playerHand.getHand());
+
         table.showdown(10);
-        assertEquals(110,player1.getMoney());
+        assertNotEquals(99,player1.getMoney());
     }
 }

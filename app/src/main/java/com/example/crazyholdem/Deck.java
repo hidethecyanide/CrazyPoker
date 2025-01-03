@@ -21,6 +21,7 @@ public class Deck {
 
             }
         }
+        numberOfCards = deck.size();
     }
     public int getNumberOfCards(){
         return numberOfCards;

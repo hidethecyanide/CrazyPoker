@@ -70,9 +70,14 @@ public class Table {
     public void setStandingBet(int standingBet){
         this.standingBet = standingBet;
     }
+
     public void dealCard(Player player, Card card) {
         player.playerHand.addCardToHand(card);
-        deck.setCurrentCard(deck.getCurrentCard()+ 1);
+    }
+
+    public void dealCard(Player player) {
+        player.playerHand.addCardToHand(deck.getCardFromDeck(deck.getCurrentCard()));
+        deck.setCurrentCard(deck.getCurrentCard() + 1);
     }
     public void dealCommunityCards(int numberOfCards) {
 
