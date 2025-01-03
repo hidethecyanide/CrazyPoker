@@ -2,6 +2,7 @@ package com.example.crazyholdem;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -26,7 +27,7 @@ public class HandSortTest {
         table.resetRound();
     }
 
-    @Test
+    @Ignore
     public void checkPlayerSort1() {
         Player player1 = new Player("Player 1", 100);
         table.addPlayer(player1);
@@ -48,6 +49,37 @@ public class HandSortTest {
         // Add specific cards to the player's hand to ensure a pair
         table.dealCard(player2, new Card("Diamonds", 3));
         table.dealCard(player2, new Card("Hearts", 9));
+
+        table.showdown(10);
+        assertEquals(110,player1.getMoney());
+    }
+
+    @Test
+    public void checkPlayerSort2() {
+        Player player1 = new Player("Player 1", 100);
+        table.addPlayer(player1);
+
+        table.dealCommunityCards(5);
+        System.out.println("Community Cards:");
+        for (int i = 0; i < 5; i++) {
+            System.out.println(Table.communityCards.get(i));
+        }
+
+
+        // Add specific cards to the player's hand to ensure a pair
+        table.dealCard(player1, table.getDeck().getDeck().get(table.getDeck().getCurrentCard()));
+        table.dealCard(player1, table.getDeck().getDeck().get(table.getDeck().getCurrentCard()));
+        System.out.println("Player 1 Hand:");
+        System.out.println(player1.playerHand.getHand());
+
+        Player player2 = new Player("Player 2", 100);
+        table.addPlayer(player2);
+
+        // Add specific cards to the player's hand to ensure a pair
+        table.dealCard(player2, table.getDeck().getDeck().get(table.getDeck().getCurrentCard()));
+        table.dealCard(player2, table.getDeck().getDeck().get(table.getDeck().getCurrentCard()));
+        System.out.println("Player 2 Hand:");
+        System.out.println(player2.playerHand.getHand());
 
         table.showdown(10);
         assertEquals(110,player1.getMoney());

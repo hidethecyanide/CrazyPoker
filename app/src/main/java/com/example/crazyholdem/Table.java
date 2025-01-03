@@ -72,6 +72,7 @@ public class Table {
     }
     public void dealCard(Player player, Card card) {
         player.playerHand.addCardToHand(card);
+        deck.setCurrentCard(deck.getCurrentCard()+ 1);
     }
     public void dealCommunityCards(int numberOfCards) {
 
