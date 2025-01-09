@@ -157,7 +157,7 @@ public class HandCheckTest {
 
         Table.communityCards.add(new Card("Hearts",10));
         Table.communityCards.add(new Card("Hearts",5));
-        Table.communityCards.add(new Card("Diamonds",14));
+        Table.communityCards.add(new Card("Diamonds",6));
         Table.communityCards.add(new Card("Spades",2));
         Table.communityCards.add(new Card("Diamonds",10));
 

@@ -155,7 +155,6 @@ public class PlayerHand {
     }
     public boolean isStraight(List<Card> hand) {
         // Combine player's hand and community cards
-        List<Card> scoringHand = new ArrayList<>(hand);
         scoringHand.addAll(Table.communityCards);
         scoringHand.sort((c1, c2) -> c2.getValue() - c1.getValue());
         int straightLength = 1;

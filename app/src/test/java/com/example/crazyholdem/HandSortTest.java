@@ -27,28 +27,28 @@ public class HandSortTest {
         table.resetRound();
     }
 
-    @Ignore
+    @Test
     public void checkPlayerSort1() {
         Player player1 = new Player("Player 1", 100);
         table.addPlayer(player1);
 
-        Table.communityCards.add(new Card("Diamonds",11));
-        Table.communityCards.add(new Card("Clubs",11));
-        Table.communityCards.add(new Card("Diamonds",6));
-        Table.communityCards.add(new Card("Spades",11));
-        Table.communityCards.add(new Card("Spades",12));
+        Table.communityCards.add(new Card("Diamonds",5));
+        Table.communityCards.add(new Card("Clubs",4));
+        Table.communityCards.add(new Card("Diamonds",5));
+        Table.communityCards.add(new Card("Spades",3));
+        Table.communityCards.add(new Card("Spades",2));
 
 
         // Add specific cards to the player's hand to ensure a pair
-        table.dealCard(player1, new Card("Hearts", 7));
-        table.dealCard(player1, new Card("Spades", 11));
+        table.dealCard(player1, new Card("Hearts", 6));
+        table.dealCard(player1, new Card("Spades", 4));
 
         Player player2 = new Player("Player 2", 100);
         table.addPlayer(player2);
 
         // Add specific cards to the player's hand to ensure a pair
-        table.dealCard(player2, new Card("Diamonds", 5));
-        table.dealCard(player2, new Card("Hearts", 6));
+        table.dealCard(player2, new Card("Diamonds", 2));
+        table.dealCard(player2, new Card("Hearts", 14));
 
         table.showdown(10);
         assertEquals(110,player1.getMoney());
