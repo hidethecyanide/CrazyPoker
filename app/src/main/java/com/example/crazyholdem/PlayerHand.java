@@ -488,9 +488,7 @@ public class PlayerHand {
     }
     public boolean isRoyalFlush(List<Card> hand) {
         if(isStraightFlush(hand)){
-            if(scoringHand.get(0).getValue() == 14){
-                return true;
-            }
+            return scoringHand.get(0).getValue() == 14;
         }
         return false;
     }
