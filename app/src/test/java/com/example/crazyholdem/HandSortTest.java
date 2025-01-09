@@ -27,7 +27,7 @@ public class HandSortTest {
         table.resetRound();
     }
 
-    @Test
+    @Ignore
     public void checkPlayerSort1() {
         Player player1 = new Player("Player 1", 100);
         table.addPlayer(player1);

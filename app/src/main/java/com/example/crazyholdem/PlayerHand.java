@@ -472,7 +472,12 @@ public class PlayerHand {
             if (straightLength == 5) {
                 scoringHand.clear();
                 scoringHand.addAll(straightCards);
-                System.out.println("Straight Flush");
+                if(scoringHand.get(0).getValue() == 14){
+                    System.out.println("Royal Flush");
+                }
+                else {
+                    System.out.println("Straight Flush");
+                }
                 for(Card card : scoringHand){
                     System.out.println(card.toString());
                 }
@@ -482,6 +487,11 @@ public class PlayerHand {
         return false;
     }
     public boolean isRoyalFlush(List<Card> hand) {
+        if(isStraightFlush(hand)){
+            if(scoringHand.get(0).getValue() == 14){
+                return true;
+            }
+        }
         return false;
     }
     public void addCardToHand(Card card){
