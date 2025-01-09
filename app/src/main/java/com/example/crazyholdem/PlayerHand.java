@@ -66,46 +66,47 @@ public class PlayerHand {
     }
 
     public boolean isTwoPair(List<Card> hand) {
-        if(isPair(hand)) {
-            Card highPair2 = scoringHand.get(0);
-            Card highPair1 = scoringHand.get(1);
-            scoringHand.clear();
-            scoringHand.addAll(hand); // Add player's two cards
-            scoringHand.addAll(Table.communityCards);
-            scoringHand.sort((c1, c2) -> c2.getValue() - c1.getValue());
-            boolean secondPair = false;
-            int k = 0;
-            for (int i = 0; i < scoringHand.size() - 1; i++) {
-                if (scoringHand.get(i).getValue() == scoringHand.get(i + 1).getValue()) {
-                    if (secondPair) {
-                        Card card1 = scoringHand.get(i);
-                        Card card2 = scoringHand.get(i + 1);
+        scoringHand.clear();
+        scoringHand.addAll(hand); // Add player's two cards
+        scoringHand.addAll(Table.communityCards);
+        scoringHand.sort((c1, c2) -> c2.getValue() - c1.getValue());
+        boolean secondPair = false;
+        int k = 0;
+        Card highPair1 = null;
+        Card highPair2 = null;
+        for (int i = 0; i < scoringHand.size() - 1; i++) {
+            if (scoringHand.get(i).getValue() == scoringHand.get(i + 1).getValue()) {
+                if (secondPair) {
+                    Card card1 = scoringHand.get(i);
+                    Card card2 = scoringHand.get(i + 1);
 
-                        // Reorganize scoringHand
-                        List<Card> frontPair = new ArrayList<>();
-                        frontPair.add(highPair1);
-                        frontPair.add(highPair2);
-                        frontPair.add(card1);
-                        frontPair.add(card2);
-                        for (int j = 0; j < scoringHand.size(); j++) {
-                            if (j != k && j != k+1 && j != i && j != i + 1 && frontPair.size() < 5) {
-                                frontPair.add(scoringHand.get(j));
-                            }
+                    // Reorganize scoringHand
+                    List<Card> frontPair = new ArrayList<>();
+                    frontPair.add(highPair1);
+                    frontPair.add(highPair2);
+                    frontPair.add(card1);
+                    frontPair.add(card2);
+                    for (int j = 0; j < scoringHand.size(); j++) {
+                        if (j != k && j != k+1 && j != i && j != i + 1 && frontPair.size() < 5) {
+                            frontPair.add(scoringHand.get(j));
                         }
-                        scoringHand.clear();
-                        scoringHand.addAll(frontPair);
-                        System.out.println("Two pair");
-                        for(Card card : scoringHand){
-                            System.out.println(card.toString());
-                        }
-                        return true;
-                    } else {
-                        secondPair = true;
-                        k=i;
-                        i++;
                     }
+                    scoringHand.clear();
+                    scoringHand.addAll(frontPair);
+                    System.out.println("Two pair");
+                    for(Card card : scoringHand){
+                        System.out.println(card.toString());
+                    }
+                    return true;
+                } else {
+                    secondPair = true;
+                    highPair1 = scoringHand.get(i);
+                    highPair2 = scoringHand.get(i + 1);
+                    k=i;
+                    i++;
                 }
             }
+
         }
         return false;
     }
@@ -153,6 +154,40 @@ public class PlayerHand {
         return false;
     }
     public boolean isStraight(List<Card> hand) {
+        // Combine player's hand and community cards
+        List<Card> scoringHand = new ArrayList<>(hand);
+        scoringHand.addAll(Table.communityCards);
+        scoringHand.sort((c1, c2) -> c2.getValue() - c1.getValue());
+        int straightLength = 1;
+        List<Card> straightCards = new ArrayList<>();
+        straightCards.add(scoringHand.get(0)); // Add first card to start the straight check
+        for (int i = 1; i < scoringHand.size(); i++) {
+            int current = scoringHand.get(i - 1).getValue();
+            int next = scoringHand.get(i).getValue();
+            if (current == next) {
+                continue;
+            } else if (current == next + 1) {
+                straightLength++;
+                straightCards.add(scoringHand.get(i));
+            } else {
+                straightLength = 1;
+                straightCards.clear();
+                straightCards.add(scoringHand.get(i));
+            }
+            if (straightLength == 4 && scoringHand.get(0).getValue() == 14 && straightCards.get(0).getValue() == 5) {
+                straightCards.add(scoringHand.get(0));
+                straightLength++;
+            }
+            if (straightLength == 5) {
+                scoringHand.clear();
+                scoringHand.addAll(straightCards);
+                System.out.println("Straight");
+                for(Card card : scoringHand){
+                    System.out.println(card.toString());
+                }
+                return true;
+            }
+        }
         return false;
     }
     public boolean isFlush(List<Card> hand) {
@@ -238,26 +273,73 @@ public class PlayerHand {
         return false;
     }
     public boolean isFullHouse(List<Card> hand) {
-      /*  scoringHand.clear();
-        int pairValue;
-        int threeOfAKindValue;
-        if(isPair(hand)){
-            pairValue = scoringHand.get(0).getValue();
+        // Combine player's hand and community cards
+        scoringHand.clear();
+        scoringHand.addAll(hand);
+        scoringHand.addAll(Table.communityCards);
+
+        // Sort the cards in descending order of value
+        scoringHand.sort((c1, c2) -> c2.getValue() - c1.getValue());
+
+        // Find the Three of a Kind
+        Card threeKind1 = null, threeKind2 = null, threeKind3 = null;
+        for (int i = 0; i < scoringHand.size() - 2; i++) {
+            if (scoringHand.get(i).getValue() == scoringHand.get(i + 1).getValue() &&
+                    scoringHand.get(i).getValue() == scoringHand.get(i + 2).getValue()) {
+                threeKind1 = scoringHand.get(i);
+                threeKind2 = scoringHand.get(i + 1);
+                threeKind3 = scoringHand.get(i + 2);
+
+                // Remove the three-of-a-kind cards from the hand
+                scoringHand.remove(i);
+                scoringHand.remove(i);
+                scoringHand.remove(i);
+
+                break;
+            }
         }
-        else {
+
+        // If no Three of a Kind found, return false
+        if (threeKind1 == null) {
             return false;
         }
-        if(isThreeOfAKind(hand)) {
-            threeOfAKindValue = scoringHand.get(0).getValue();
+
+        // Find a Pair
+        Card pair1 = null, pair2 = null;
+        for (int i = 0; i < scoringHand.size() - 1; i++) {
+            if (scoringHand.get(i).getValue() == scoringHand.get(i + 1).getValue()) {
+                pair1 = scoringHand.get(i);
+                pair2 = scoringHand.get(i + 1);
+
+                // Remove the pair cards from the hand
+                scoringHand.remove(i);
+                scoringHand.remove(i);
+
+                break;
+            }
         }
-        else{
+
+        // If no Pair found, return false
+        if (pair1 == null) {
             return false;
         }
-        if(pairValue == threeOfAKindValue){
-            return true;
-        } */
-        return false;
+
+        // Reorganize scoringHand
+        scoringHand.clear();
+        scoringHand.add(threeKind1);
+        scoringHand.add(threeKind2);
+        scoringHand.add(threeKind3);
+        scoringHand.add(pair1);
+        scoringHand.add(pair2);
+
+        System.out.println("Full House");
+        for(Card card : scoringHand){
+            System.out.println(card.toString());
+        }
+
+        return true;
     }
+
     public boolean isFourOfAKind(List<Card> hand) {
         scoringHand.clear();
         scoringHand.addAll(hand); // Add player's two cards

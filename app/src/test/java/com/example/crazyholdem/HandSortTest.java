@@ -32,16 +32,16 @@ public class HandSortTest {
         Player player1 = new Player("Player 1", 100);
         table.addPlayer(player1);
 
-        Table.communityCards.add(new Card("Diamonds",3));
         Table.communityCards.add(new Card("Diamonds",11));
-        Table.communityCards.add(new Card("Diamonds",6));
         Table.communityCards.add(new Card("Clubs",11));
+        Table.communityCards.add(new Card("Diamonds",6));
+        Table.communityCards.add(new Card("Spades",11));
         Table.communityCards.add(new Card("Spades",12));
 
 
         // Add specific cards to the player's hand to ensure a pair
         table.dealCard(player1, new Card("Hearts", 7));
-        table.dealCard(player1, new Card("Spades", 13));
+        table.dealCard(player1, new Card("Spades", 11));
 
         Player player2 = new Player("Player 2", 100);
         table.addPlayer(player2);
@@ -51,7 +51,7 @@ public class HandSortTest {
         table.dealCard(player2, new Card("Hearts", 6));
 
         table.showdown(10);
-        assertEquals(110,player2.getMoney());
+        assertEquals(110,player1.getMoney());
     }
 
     @Test
