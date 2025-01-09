@@ -171,6 +171,27 @@ public class HandCheckTest {
         assertTrue("Player's hand should contain a Strait",
                 player1.playerHand.isStraight(player1.playerHand.getHand()));
     }
+    @Test
+    public void straitFlushRecognition() {
+        // Set up a player and deal community cards
+        Player player1 = new Player("Player 1", 100);
+
+        Table.communityCards.add(new Card("Hearts",7));
+        Table.communityCards.add(new Card("Hearts",5));
+        Table.communityCards.add(new Card("Hearts",6));
+        Table.communityCards.add(new Card("Spades",2));
+        Table.communityCards.add(new Card("Diamonds",10));
+
+        // Add specific cards to the player's hand to ensure a pair
+        table.dealCard(player1, new Card("Hearts", 4));
+        table.dealCard(player1, new Card("Hearts", 3));
+
+
+
+        // Test if a pair is correctly identified
+        assertTrue("Player's hand should contain a Strait",
+                player1.playerHand.isStraightFlush(player1.playerHand.getHand()));
+    }
 
 
 }

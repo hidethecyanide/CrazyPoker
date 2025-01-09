@@ -26,7 +26,6 @@ public class PlayerHand {
         }
         return true;
     }
-
     public boolean isPair(List<Card> hand) {
         // Combine the player's hand and community cards
         scoringHand.clear();
@@ -64,7 +63,6 @@ public class PlayerHand {
         // No pair found
         return false;
     }
-
     public boolean isTwoPair(List<Card> hand) {
         scoringHand.clear();
         scoringHand.addAll(hand); // Add player's two cards
@@ -191,6 +189,8 @@ public class PlayerHand {
         return false;
     }
     public boolean isFlush(List<Card> hand) {
+
+        //TODO: simplify flush
         scoringHand.clear();
         scoringHand.addAll(hand); // Add player's two cards
         scoringHand.addAll(Table.communityCards);
@@ -339,7 +339,6 @@ public class PlayerHand {
 
         return true;
     }
-
     public boolean isFourOfAKind(List<Card> hand) {
         scoringHand.clear();
         scoringHand.addAll(hand); // Add player's two cards
@@ -389,6 +388,97 @@ public class PlayerHand {
         return false;
     }
     public boolean isStraightFlush(List<Card> hand) {
+        scoringHand.clear();
+        scoringHand.addAll(hand); // Add player's two cards
+        scoringHand.addAll(Table.communityCards);
+        scoringHand.sort((c1, c2) -> c2.getValue() - c1.getValue());
+        int numOfSpades = 0;
+        int numOfHearts = 0;
+        int numOfClubs = 0;
+        int numOfDiamonds = 0;
+        for(Card card : scoringHand){
+            switch (card.suit) {
+                case "Spades":
+                    numOfSpades++;
+                    break;
+                case "Hearts":
+                    numOfHearts++;
+                    break;
+                case "Clubs":
+                    numOfClubs++;
+                    break;
+                case "Diamonds":
+                    numOfDiamonds++;
+                    break;
+            }
+        }
+        ArrayList<Card> flush = new ArrayList<>();
+        boolean flushFound = false;
+        if(numOfSpades >= 5 || numOfHearts >= 5 || numOfClubs >= 5 || numOfDiamonds >= 5) {
+            flushFound = true;
+            if(numOfSpades >= 5) {
+                for (Card card : scoringHand) {
+                    if (card.suit.equals("Spades")) {
+                        flush.add(card);
+                    }
+                }
+            }
+            else if(numOfHearts >= 5) {
+                for (Card card : scoringHand) {
+                    if (card.suit.equals("Hearts")) {
+                        flush.add(card);
+                    }
+                }
+            }
+            else if(numOfClubs >= 5) {
+                for (Card card : scoringHand) {
+                    if (card.suit.equals("Clubs")) {
+                        flush.add(card);
+                    }
+                }
+            }
+            else {
+                for (Card card : scoringHand) {
+                    if (card.suit.equals("Diamonds")){
+                        flush.add(card);
+                    }
+                }
+            }
+        }
+        if(!flushFound){
+            return false;
+        }
+        int straightLength = 1;
+        List<Card> straightCards = new ArrayList<>();
+        scoringHand = flush;
+        straightCards.add(scoringHand.get(0)); // Add first card to start the straight check
+        for (int i = 1; i < scoringHand.size(); i++) {
+            int current = scoringHand.get(i - 1).getValue();
+            int next = scoringHand.get(i).getValue();
+            if (current == next) {
+                continue;
+            } else if (current == next + 1) {
+                straightLength++;
+                straightCards.add(scoringHand.get(i));
+            } else {
+                straightLength = 1;
+                straightCards.clear();
+                straightCards.add(scoringHand.get(i));
+            }
+            if (straightLength == 4 && scoringHand.get(0).getValue() == 14 && straightCards.get(0).getValue() == 5) {
+                straightCards.add(scoringHand.get(0));
+                straightLength++;
+            }
+            if (straightLength == 5) {
+                scoringHand.clear();
+                scoringHand.addAll(straightCards);
+                System.out.println("Straight Flush");
+                for(Card card : scoringHand){
+                    System.out.println(card.toString());
+                }
+                return true;
+            }
+        }
         return false;
     }
     public boolean isRoyalFlush(List<Card> hand) {
