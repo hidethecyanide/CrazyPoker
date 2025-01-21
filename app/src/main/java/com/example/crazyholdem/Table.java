@@ -131,14 +131,28 @@ public class Table {
             }
             winners = filteredWinners; // Update the winners list
         }
-
+        int remainingPot = pot;
         for (Player winner : winners) {
-            winner.showHand();
-            winner.setMoney(winner.money += pot / winners.size());
+            int eligiblePot;
+            if (winner.isAllIn()) {
+                eligiblePot = winner.getMoney() * nonFoldedPlayers.size();
+                eligiblePot = Math.min(eligiblePot, remainingPot); // Cap at the remaining pot
+            } else {
+                eligiblePot = remainingPot;
+            }
+
+            // Distribute the eligible pot to the winner(s)
+            int share = eligiblePot / winners.size();
+            winner.setMoney(winner.money + share);
+            remainingPot -= eligiblePot;
+
+            System.out.println(winner.getName() + " has won " + share);
         }
 
-        for (Player player : winners) {
-            System.out.println(player.getName() + " has won " + pot / winners.size());
+        // Handle remaining pot (if any) recursively
+        if (remainingPot > 0 && nonFoldedPlayers.size() > winners.size()) {
+            nonFoldedPlayers.removeAll(winners); // Exclude current winners
+            showdown(remainingPot); // Recalculate with remaining players
         }
 
     }
