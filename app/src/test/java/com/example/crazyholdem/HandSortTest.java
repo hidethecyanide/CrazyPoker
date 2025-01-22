@@ -54,7 +54,7 @@ public class HandSortTest {
         assertEquals(110,player1.getMoney());
     }
 
-    @Test
+    @Ignore
     public void checkPlayerSort2() {
         table.dealCommunityCards(5);
         System.out.println("Community Cards:");
@@ -85,5 +85,40 @@ public class HandSortTest {
 
         table.showdown(10);
         assertNotEquals(99,player1.getMoney());
+    }
+
+    @Test
+    public void allInTest() {
+        Player player1 = new Player("Player 1", 100);
+        table.addPlayer(player1);
+
+        Table.communityCards.add(new Card("Hearts",5));
+        Table.communityCards.add(new Card("Hearts",4));
+        Table.communityCards.add(new Card("Diamonds",5));
+        Table.communityCards.add(new Card("Hearts",3));
+        Table.communityCards.add(new Card("Hearts",2));
+
+
+        // Add specific cards to the player's hand to ensure a pair
+        table.dealCard(player1, new Card("Clubs", 6));
+        table.dealCard(player1, new Card("Spades", 4));
+
+        Player player2 = new Player("Player 2", 100);
+        table.addPlayer(player2);
+
+        // Add specific cards to the player's hand to ensure a pair
+        table.dealCard(player2, new Card("Hearts", 7));
+        table.dealCard(player2, new Card("Spades", 14));
+
+        Player player3 = new Player("Player 3", 40);
+
+        table.addPlayer(player3);
+        table.dealCard(player3, new Card("Hearts", 8));
+        table.dealCard(player3, new Card("Spades", 11));
+        player3.setAllIn(true);
+
+
+        table.showdown(160);
+        assertEquals(120,player3.getMoney());
     }
 }

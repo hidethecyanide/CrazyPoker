@@ -56,7 +56,6 @@ public class Table {
     }
     public void addPlayer(Player player) {
         players.add(player);
-
     }
     public void removePlayer(Player player) {
         players.remove(player);
@@ -105,13 +104,12 @@ public class Table {
         for( Player player : nonFoldedPlayers){
             player.playerHand.evaluateHand();
         }
+
         // Step 2: Sort players by hand strength
-        ArrayList<Player> winners = nonFoldedPlayers;
+        ArrayList<Player> winners = new ArrayList<>(nonFoldedPlayers);
         Collections.sort(winners, (p1, p2) -> p2.playerHand.getHandStrength() - p1.playerHand.getHandStrength());
         int handStrength = winners.get(0).playerHand.getHandStrength();
         winners.removeIf(player -> player.playerHand.getHandStrength() != handStrength);
-
-
         for (int i = 0; i < 5; i++) {
             int maxValue = 0;
 
@@ -143,7 +141,12 @@ public class Table {
 
             // Distribute the eligible pot to the winner(s)
             int share = eligiblePot / winners.size();
-            winner.setMoney(winner.money + share);
+            if (winner.isAllIn()) {
+                winner.setMoney(share);
+            }
+            else {
+                winner.setMoney(winner.money + share);
+            }
             remainingPot -= eligiblePot;
 
             System.out.println(winner.getName() + " has won " + share);
