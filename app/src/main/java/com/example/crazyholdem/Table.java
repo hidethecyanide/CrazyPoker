@@ -154,6 +154,8 @@ public class Table {
 
     }
     //public void startRound();
+
+    //TODO: round logic
     public void resetRound(){
         deck.resetDeck();
         clearCommunityCards();

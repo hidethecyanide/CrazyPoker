@@ -13,7 +13,6 @@ public class PlayerHand {
         this.hand = new ArrayList<>();
         this.scoringHand = new ArrayList<>();
     }
-    //TODO: code logic for evaluation
     public boolean isHighCard(List<Card> hand) {
         scoringHand.clear();
         scoringHand.addAll(hand); // Add player's two cards

@@ -45,7 +45,6 @@ public class HandCheckTest {
         assertEquals("Current card should be 0", 0, table.getDeck().getCurrentCard());
     }
 
-    //TODO: check contents of arrays
     @Test
     public void threeKindRecognition() {
         // Set up a player and deal community cards
