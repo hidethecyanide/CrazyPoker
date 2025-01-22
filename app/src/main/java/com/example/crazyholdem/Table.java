@@ -129,11 +129,12 @@ public class Table {
             }
             winners = filteredWinners; // Update the winners list
         }
+
         int remainingPot = pot;
         for (Player winner : winners) {
             int eligiblePot;
             if (winner.isAllIn()) {
-                eligiblePot = winner.getMoney() * nonFoldedPlayers.size();
+                eligiblePot = winner.getAllInAmount() * nonFoldedPlayers.size();
                 eligiblePot = Math.min(eligiblePot, remainingPot); // Cap at the remaining pot
             } else {
                 eligiblePot = remainingPot;
@@ -141,12 +142,7 @@ public class Table {
 
             // Distribute the eligible pot to the winner(s)
             int share = eligiblePot / winners.size();
-            if (winner.isAllIn()) {
-                winner.setMoney(share);
-            }
-            else {
-                winner.setMoney(winner.money + share);
-            }
+            winner.setMoney(winner.money + share);
             remainingPot -= eligiblePot;
 
             System.out.println(winner.getName() + " has won " + share);

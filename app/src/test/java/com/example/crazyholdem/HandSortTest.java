@@ -96,7 +96,7 @@ public class HandSortTest {
         Table.communityCards.add(new Card("Hearts",4));
         Table.communityCards.add(new Card("Diamonds",5));
         Table.communityCards.add(new Card("Hearts",3));
-        Table.communityCards.add(new Card("Hearts",2));
+        Table.communityCards.add(new Card("Spades",2));
 
 
         // Add specific cards to the player's hand to ensure a pair
@@ -113,12 +113,12 @@ public class HandSortTest {
         Player player3 = new Player("Player 3", 40);
 
         table.addPlayer(player3);
-        table.dealCard(player3, new Card("Hearts", 8));
-        table.dealCard(player3, new Card("Spades", 11));
+        table.dealCard(player3, new Card("Spades", 6));
+        table.dealCard(player3, new Card("Spades", 14));
         player3.setAllIn(true);
 
 
         table.showdown(160);
-        assertEquals(120,player3.getMoney());
+        assertEquals(200,player1.getMoney());
     }
 }
