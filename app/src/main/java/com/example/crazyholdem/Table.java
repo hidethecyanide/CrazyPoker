@@ -144,7 +144,10 @@ public class Table {
         pot -= eligiblePot;
         // Handle remaining pot (if any) recursively
         if (pot > 0 && nonFoldedPlayers.size() > winners.size()) {
-            nonFoldedPlayers.removeIf(player -> player.isAllIn()); // Exclude current winners
+            int finalEligiblePot = eligiblePot;
+            ArrayList<Player> finalPlayers = nonFoldedPlayers;
+            int finalEligiblePot1 = eligiblePot;
+            nonFoldedPlayers.removeIf(player -> player.isAllIn() && player.getAllInAmount() * finalPlayers.size() <= finalEligiblePot);
             showdown(pot); // Recalculate with remaining players
         }
 
