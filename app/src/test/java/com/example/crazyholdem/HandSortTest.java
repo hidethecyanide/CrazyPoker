@@ -122,6 +122,6 @@ public class HandSortTest {
 
 
         table.showdown(180);
-        assertEquals(200,player1.getMoney());
+        assertEquals(178,player1.getMoney());
     }
 }

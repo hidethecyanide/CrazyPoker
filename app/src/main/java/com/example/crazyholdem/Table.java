@@ -137,10 +137,12 @@ public class Table {
             }
         }
         int share = eligiblePot / winners.size();
+        int extra = eligiblePot % winners.size();
         for (Player winner : winners) {
             winner.setMoney(winner.money + share);
             System.out.println(winner.getName() + " has won " + share);
         }
+        winners.get(0).setMoney(winners.get(0).money + extra);
         pot -= eligiblePot;
         // Handle remaining pot (if any) recursively
         if (pot > 0 && nonFoldedPlayers.size() > winners.size()) {
