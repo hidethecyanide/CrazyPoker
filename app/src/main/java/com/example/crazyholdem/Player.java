@@ -6,6 +6,7 @@ public class Player {
 
     private String name;
     int money;
+    int allInAmount;
     private boolean isDealer;
     private boolean isAllIn;
     private boolean isFolded;
@@ -14,6 +15,7 @@ public class Player {
     public Player(String name, int money) {
         this.name = name;
         this.money = money;
+        this.allInAmount = 0;
         this.isDealer = false;
         this.isAllIn = false;
         this.isFolded = false;
@@ -49,7 +51,10 @@ public class Player {
     }
 
     public void setAllIn(boolean isAllIn){
+
         this.isAllIn = isAllIn;
+        allInAmount = money;
+        money = 0;
     }
 
     public boolean isFolded(){
@@ -66,6 +71,13 @@ public class Player {
 
     public void showHand(){
         System.out.println(playerHand.getHand());
+    }
+
+    public void setAllInAmount(int allInAmount){
+        this.allInAmount = allInAmount;
+    }
+    public int getAllInAmount(){
+        return this.allInAmount;
     }
 
 }

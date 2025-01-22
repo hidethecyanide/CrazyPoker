@@ -27,8 +27,8 @@ public class HandCheckTest {
         table.dealCommunityCards(5); // Assuming table manages community cards
 
         // Add specific cards to the player's hand to ensure a pair
-        player1.playerHand.addCardToHand(new Card("Hearts", 3));
-        player1.playerHand.addCardToHand(new Card("Diamonds", 3));
+        table.dealCard(player1, new Card("Hearts", 3));
+        table.dealCard(player1, new Card("Diamonds", 3));
 
         // Test if a pair is correctly identified
         assertTrue("Player's hand should contain a pair",
@@ -45,18 +45,175 @@ public class HandCheckTest {
         assertEquals("Current card should be 0", 0, table.getDeck().getCurrentCard());
     }
 
-    @Ignore
+    //TODO: check contents of arrays
+    @Test
     public void threeKindRecognition() {
         // Set up a player and deal community cards
         Player player1 = new Player("Player 1", 100);
-        table.dealCommunityCards(5); // Assuming table manages community cards
+
+        Table.communityCards.add(new Card("Clubs",13));
+        Table.communityCards.add(new Card("Hearts",5));
+        Table.communityCards.add(new Card("Diamonds",3));
+        Table.communityCards.add(new Card("Clubs",4));
+        Table.communityCards.add(new Card("Spades",5));
 
         // Add specific cards to the player's hand to ensure a pair
-        player1.playerHand.addCardToHand(new Card("Hearts", 3));
-        player1.playerHand.addCardToHand(new Card("Diamonds", 2));
+        table.dealCard(player1, new Card("Hearts", 5));
+        table.dealCard(player1, new Card("Diamonds", 12));
 
         // Test if a pair is correctly identified
-        assertTrue("Player's hand should contain a pair",
-                player1.playerHand.isPair(player1.playerHand.getHand()));
+        assertTrue("Player's hand should contain a three of a kind",
+                player1.playerHand.isThreeOfAKind(player1.playerHand.getHand()));
     }
+
+    @Test
+    public void fourKindRecognition() {
+        // Set up a player and deal community cards
+        Player player1 = new Player("Player 1", 100);
+
+        Table.communityCards.add(new Card("Clubs",2));
+        Table.communityCards.add(new Card("Hearts",5));
+        Table.communityCards.add(new Card("Diamonds",3));
+        Table.communityCards.add(new Card("Clubs",3));
+        Table.communityCards.add(new Card("Spades",5));
+
+        // Add specific cards to the player's hand to ensure a pair
+        table.dealCard(player1, new Card("Hearts", 3));
+        table.dealCard(player1, new Card("Diamonds", 3));
+
+        // Test if a pair is correctly identified
+        assertTrue("Player's hand should contain a four of a kind",
+                player1.playerHand.isFourOfAKind(player1.playerHand.getHand()));
+    }
+
+    @Test
+    public void flushRecognition() {
+        // Set up a player and deal community cards
+        Player player1 = new Player("Player 1", 100);
+
+        Table.communityCards.add(new Card("Clubs",2));
+        Table.communityCards.add(new Card("Hearts",8));
+        Table.communityCards.add(new Card("Diamonds",3));
+        Table.communityCards.add(new Card("Hearts",3));
+        Table.communityCards.add(new Card("Hearts",5));
+
+        // Add specific cards to the player's hand to ensure a pair
+        table.dealCard(player1, new Card("Hearts", 11));
+        table.dealCard(player1, new Card("Hearts", 12));
+
+        // Test if a pair is correctly identified
+        assertTrue("Player's hand should contain a flush",
+                player1.playerHand.isFlush(player1.playerHand.getHand()));
+    }
+
+    @Test
+    public void twoPairRecognition() {
+        // Set up a player and deal community cards
+        Player player1 = new Player("Player 1", 100);
+
+        Table.communityCards.add(new Card("Clubs",2));
+        Table.communityCards.add(new Card("Hearts",8));
+        Table.communityCards.add(new Card("Diamonds",3));
+        Table.communityCards.add(new Card("Clubs",3));
+        Table.communityCards.add(new Card("Hearts",12));
+
+        // Add specific cards to the player's hand to ensure a pair
+        table.dealCard(player1, new Card("Clubs", 2));
+        table.dealCard(player1, new Card("Clubs", 12));
+
+
+
+        // Test if a pair is correctly identified
+        assertTrue("Player's hand should contain a two pair",
+                player1.playerHand.isTwoPair(player1.playerHand.getHand()));
+    }
+
+    @Test
+    public void fullHouseRecognition() {
+        // Set up a player and deal community cards
+        Player player1 = new Player("Player 1", 100);
+
+        Table.communityCards.add(new Card("Hearts",2));
+        Table.communityCards.add(new Card("Hearts",3));
+        Table.communityCards.add(new Card("Diamonds",3));
+        Table.communityCards.add(new Card("Spades",3));
+        Table.communityCards.add(new Card("Diamonds",12));
+
+        // Add specific cards to the player's hand to ensure a pair
+        table.dealCard(player1, new Card("Hearts", 3));
+        table.dealCard(player1, new Card("Hearts", 12));
+
+
+
+        // Test if a pair is correctly identified
+        assertTrue("Player's hand should contain a Full House",
+                player1.playerHand.isFullHouse(player1.playerHand.getHand()));
+    }
+
+    @Test
+    public void straitRecognition() {
+        // Set up a player and deal community cards
+        Player player1 = new Player("Player 1", 100);
+
+        Table.communityCards.add(new Card("Hearts",10));
+        Table.communityCards.add(new Card("Hearts",5));
+        Table.communityCards.add(new Card("Diamonds",6));
+        Table.communityCards.add(new Card("Spades",2));
+        Table.communityCards.add(new Card("Diamonds",10));
+
+        // Add specific cards to the player's hand to ensure a pair
+        table.dealCard(player1, new Card("Hearts", 4));
+        table.dealCard(player1, new Card("Hearts", 3));
+
+
+
+        // Test if a pair is correctly identified
+        assertTrue("Player's hand should contain a Strait",
+                player1.playerHand.isStraight(player1.playerHand.getHand()));
+    }
+    @Test
+    public void straitFlushRecognition() {
+        // Set up a player and deal community cards
+        Player player1 = new Player("Player 1", 100);
+
+        Table.communityCards.add(new Card("Hearts",7));
+        Table.communityCards.add(new Card("Hearts",5));
+        Table.communityCards.add(new Card("Hearts",6));
+        Table.communityCards.add(new Card("Spades",2));
+        Table.communityCards.add(new Card("Diamonds",10));
+
+        // Add specific cards to the player's hand to ensure a pair
+        table.dealCard(player1, new Card("Hearts", 4));
+        table.dealCard(player1, new Card("Hearts", 3));
+
+
+
+        // Test if a pair is correctly identified
+        assertTrue("Player's hand should contain a Strait",
+                player1.playerHand.isStraightFlush(player1.playerHand.getHand()));
+    }
+
+    @Test
+    public void RoyalFlushRecognition() {
+        // Set up a player and deal community cards
+        Player player1 = new Player("Player 1", 100);
+
+        Table.communityCards.add(new Card("Hearts",12));
+        Table.communityCards.add(new Card("Hearts",13));
+        Table.communityCards.add(new Card("Hearts",14));
+        Table.communityCards.add(new Card("Spades",14));
+        Table.communityCards.add(new Card("Diamonds",10));
+
+        // Add specific cards to the player's hand to ensure a pair
+        table.dealCard(player1, new Card("Hearts", 11));
+        table.dealCard(player1, new Card("Hearts", 10));
+
+
+
+        // Test if a pair is correctly identified
+        assertTrue("Player's hand should contain a Strait",
+                player1.playerHand.isRoyalFlush(player1.playerHand.getHand()));
+    }
+
+
 }

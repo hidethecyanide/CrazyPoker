@@ -26,4 +26,9 @@ public class Card {
             this.value = value;
         }
 
+        @Override
+        public String toString() {
+            return value + " of " + suit;
+        }
+
 }

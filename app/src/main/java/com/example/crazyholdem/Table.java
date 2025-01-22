@@ -2,6 +2,7 @@ package com.example.crazyholdem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class Table {
 
@@ -69,8 +70,14 @@ public class Table {
     public void setStandingBet(int standingBet){
         this.standingBet = standingBet;
     }
+
     public void dealCard(Player player, Card card) {
         player.playerHand.addCardToHand(card);
+    }
+
+    public void dealCard(Player player) {
+        player.playerHand.addCardToHand(deck.getCardFromDeck(deck.getCurrentCard()));
+        deck.setCurrentCard(deck.getCurrentCard() + 1);
     }
     public void dealCommunityCards(int numberOfCards) {
 
@@ -86,23 +93,24 @@ public class Table {
         }
         deck.setCurrentCard(end);
     }
+
     public void clearCommunityCards(){
         communityCards.clear();
     }
     public void showdown(int pot) {
+        if (nonFoldedPlayers.isEmpty()) {
+            throw new IllegalStateException("No players to evaluate during showdown.");
+        }
         for( Player player : nonFoldedPlayers){
             player.playerHand.evaluateHand();
         }
-        // Step 2: Sort players by hand strength
-        ArrayList<Player> winners = nonFoldedPlayers;
-        Collections.sort(winners, (p1, p2) -> p2.playerHand.getHandStrength() - p1.playerHand.getHandStrength());
-        int handStrength = winners.get(0).playerHand.getHandStrength();
-        for (Player player : winners) {
-            if (player.playerHand.getHandStrength() != handStrength) {
-                winners.remove(player);
-            }
-        }
 
+        // Step 2: Sort players by hand strength
+        ArrayList<Player> winners = new ArrayList<>(nonFoldedPlayers);
+        Collections.sort(winners, (p1, p2) -> p2.playerHand.getHandStrength() - p1.playerHand.getHandStrength());
+
+        int handStrength = winners.get(0).playerHand.getHandStrength();
+        winners.removeIf(player -> player.playerHand.getHandStrength() != handStrength);
         for (int i = 0; i < 5; i++) {
             int maxValue = 0;
 
@@ -122,18 +130,36 @@ public class Table {
             }
             winners = filteredWinners; // Update the winners list
         }
-
+        int eligiblePot = pot;
         for (Player winner : winners) {
-            winner.showHand();
-            winner.setMoney(winner.money += pot / winners.size());
+            if (winner.isAllIn()) {
+                eligiblePot = Math.min(eligiblePot, winner.getAllInAmount() * nonFoldedPlayers.size());
+            }
+        }
+        int share = eligiblePot / winners.size();
+        int extra = eligiblePot % winners.size();
+        for (Player winner : winners) {
+            winner.setMoney(winner.money + share);
+            System.out.println(winner.getName() + " has won " + share);
+        }
+        winners.get(0).setMoney(winners.get(0).money + extra);
+        pot -= eligiblePot;
+        // Handle remaining pot (if any) recursively
+        if (pot > 0 && nonFoldedPlayers.size() > winners.size()) {
+            int finalEligiblePot = eligiblePot;
+            ArrayList<Player> finalPlayers = nonFoldedPlayers;
+            int finalEligiblePot1 = eligiblePot;
+            nonFoldedPlayers.removeIf(player -> player.isAllIn() && player.getAllInAmount() * finalPlayers.size() <= finalEligiblePot);
+            showdown(pot); // Recalculate with remaining players
         }
 
     }
     //public void startRound();
     public void resetRound(){
         deck.resetDeck();
-        communityCards.clear();
+        clearCommunityCards();
         standingBet = 0;
+        nonFoldedPlayers.clear();
         nonFoldedPlayers = players;
         for (Player player : players) {
             player.playerHand.resetHand();
