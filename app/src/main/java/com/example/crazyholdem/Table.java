@@ -2,6 +2,7 @@ package com.example.crazyholdem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class Table {
 
@@ -97,7 +98,6 @@ public class Table {
         communityCards.clear();
     }
     public void showdown(int pot) {
-        //TODO: code all-in clauses
         if (nonFoldedPlayers.isEmpty()) {
             throw new IllegalStateException("No players to evaluate during showdown.");
         }
@@ -108,6 +108,7 @@ public class Table {
         // Step 2: Sort players by hand strength
         ArrayList<Player> winners = new ArrayList<>(nonFoldedPlayers);
         Collections.sort(winners, (p1, p2) -> p2.playerHand.getHandStrength() - p1.playerHand.getHandStrength());
+
         int handStrength = winners.get(0).playerHand.getHandStrength();
         winners.removeIf(player -> player.playerHand.getHandStrength() != handStrength);
         for (int i = 0; i < 5; i++) {
@@ -129,29 +130,22 @@ public class Table {
             }
             winners = filteredWinners; // Update the winners list
         }
-
-        int remainingPot = pot;
+        int eligiblePot = pot;
         for (Player winner : winners) {
-            int eligiblePot;
             if (winner.isAllIn()) {
-                eligiblePot = winner.getAllInAmount() * nonFoldedPlayers.size();
-                eligiblePot = Math.min(eligiblePot, remainingPot); // Cap at the remaining pot
-            } else {
-                eligiblePot = remainingPot;
+                eligiblePot = Math.min(eligiblePot, winner.getAllInAmount() * nonFoldedPlayers.size());
             }
-
-            // Distribute the eligible pot to the winner(s)
-            int share = eligiblePot / winners.size();
+        }
+        int share = eligiblePot / winners.size();
+        for (Player winner : winners) {
             winner.setMoney(winner.money + share);
-            remainingPot -= eligiblePot;
-
             System.out.println(winner.getName() + " has won " + share);
         }
-
+        pot -= eligiblePot;
         // Handle remaining pot (if any) recursively
-        if (remainingPot > 0 && nonFoldedPlayers.size() > winners.size()) {
-            nonFoldedPlayers.removeAll(winners); // Exclude current winners
-            showdown(remainingPot); // Recalculate with remaining players
+        if (pot > 0 && nonFoldedPlayers.size() > winners.size()) {
+            nonFoldedPlayers.removeIf(player -> player.isAllIn()); // Exclude current winners
+            showdown(pot); // Recalculate with remaining players
         }
 
     }
