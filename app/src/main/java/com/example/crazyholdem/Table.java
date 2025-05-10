@@ -2,7 +2,6 @@ package com.example.crazyholdem;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 public class Table {
 
@@ -105,7 +104,6 @@ public class Table {
             player.playerHand.evaluateHand();
         }
 
-        // Step 2: Sort players by hand strength
         ArrayList<Player> winners = new ArrayList<>(nonFoldedPlayers);
         Collections.sort(winners, (p1, p2) -> p2.playerHand.getHandStrength() - p1.playerHand.getHandStrength());
 
@@ -153,7 +151,55 @@ public class Table {
         }
 
     }
-    //public void startRound();
+
+    public void prePlay(){
+        if (players.isEmpty()) {
+            throw new IllegalStateException("No players to play");
+        }
+        else if(players.size() == 1){
+            System.out.println(players.get(0).getName() + " has won the game!");
+
+        }
+        else{
+            resetRound();
+            int dealerIndex = -1;
+            for (int i = 0; i < players.size(); i++) {
+                if (players.get(i).isDealer()) {
+                    dealerIndex = i;
+                    break;
+                }
+            }
+            if (dealerIndex != -1) {
+                int bigBlindIndex = (dealerIndex + 1) % players.size();
+                int smallBlindIndex = (dealerIndex + 2) % players.size();
+
+                players.get(bigBlindIndex).bet(getStake());
+                System.out.println(players.get(bigBlindIndex).getName() + " has bet " + getStake() + " as Big Blind");
+
+                players.get(smallBlindIndex).bet(getStake() / 2);
+                System.out.println(players.get(smallBlindIndex).getName() + " has bet " + (getStake() / 2) + " as Small Blind");
+            } else {
+                System.out.println("No dealer found.");
+            }
+        }
+    }
+    //TODO: betting with all-in, checking, raising, and folding
+
+    public void startRound(int numCards) {
+    }
+
+    public void roundMain(){
+        if (nonFoldedPlayers.isEmpty()) {
+            throw new IllegalStateException("No players to play");
+        }
+    }
+
+    public void dealToPlayer(Player player, int numCards){
+        for(int i = 0; i < numCards; i++){
+            dealCard(player);
+        }
+
+    }
 
     //TODO: round logic
     public void resetRound(){
@@ -162,8 +208,21 @@ public class Table {
         standingBet = 0;
         nonFoldedPlayers.clear();
         nonFoldedPlayers = players;
+        int i = 0;
         for (Player player : players) {
             player.playerHand.resetHand();
+            player.resetBet();
+            player.setFolded(false);
+            player.setAllIn(false);
+            if (player.isDealer() && i < players.size() - 1) {
+                player.setDealer(false);
+                players.get(i + 1).setDealer(true);
+            }
+            else if (player.isDealer() && i == players.size() - 1) {
+                player.setDealer(false);
+                players.get(0).setDealer(true);
+            }
+            i++;
         }
     }
 }

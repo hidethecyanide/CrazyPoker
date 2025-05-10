@@ -11,6 +11,7 @@ public class Player {
     private boolean isAllIn;
     private boolean isFolded;
     PlayerHand playerHand;
+    int bet;
 
     public Player(String name, int money) {
         this.name = name;
@@ -20,6 +21,7 @@ public class Player {
         this.isAllIn = false;
         this.isFolded = false;
         this.playerHand = new PlayerHand();
+        this.bet = 0;
     }
 
     public String getName(){
@@ -53,7 +55,7 @@ public class Player {
     public void setAllIn(boolean isAllIn){
 
         this.isAllIn = isAllIn;
-        allInAmount = money;
+        setAllInAmount(money);
         money = 0;
     }
 
@@ -79,5 +81,17 @@ public class Player {
     public int getAllInAmount(){
         return this.allInAmount;
     }
+    public void bet(int amount){
+        money -= amount;
+        bet=amount;
+    }
+    public int getBet(){
+        return bet;
+    }
+    public void resetBet(){
+        bet = 0;
+    }
+
+
 
 }
