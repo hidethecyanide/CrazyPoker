@@ -12,4 +12,7 @@ public class TableControl {
     public void createTable(){
 
     }
+    public void gameContol(){
+
+    }
 }
