@@ -229,8 +229,5 @@ public class Table {
             i++;
         }
         setRoundNum(getRoundNum() + 1);
-        if(players.size() == 1){
-            System.out.println(players.get(0).getName() + " has won the game!");
-        }
     }
 }
