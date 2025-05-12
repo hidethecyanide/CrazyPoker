@@ -195,7 +195,7 @@ public class Table {
     }
     //TODO: betting with all-in, checking, raising, and folding
 
-    public void startRound(int numCards) {
+    public int startRound(int numCards) {
         dealCommunityCards(numCards);
         int dealerIndex = -1;
         for (int i = 0; i < players.size(); i++) {
@@ -219,6 +219,7 @@ public class Table {
         else {
             System.out.println("No dealer found.");
         }
+        return 0; //TODO: return something
     }
 
     public void dealToPlayer(Player player, int numCards){
