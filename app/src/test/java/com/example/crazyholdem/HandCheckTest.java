@@ -12,7 +12,7 @@ public class HandCheckTest {
     @BeforeClass
     public static void setUp() {
         // Initialize Table and Deck objects before all tests
-        table = new Table();
+        table = new Table(10);
     }
 
     @Before

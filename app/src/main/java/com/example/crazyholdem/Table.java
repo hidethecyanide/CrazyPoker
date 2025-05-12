@@ -11,8 +11,9 @@ public class Table {
     public static ArrayList<Card> communityCards;
     private int stake;
     private ArrayList<Player> nonFoldedPlayers;
+    public int roundNum;
 
-    public Table() {
+    public Table(int stake) {
         players = new ArrayList<>();
         deck = new Deck();
         deck.createDeck();
@@ -21,6 +22,13 @@ public class Table {
         communityCards = new ArrayList<>();
         stake = 0;
         nonFoldedPlayers = new ArrayList<>();
+        roundNum = 0;
+    }
+    public int getRoundNum(){
+        return roundNum;
+    }
+    public void setRoundNum(int roundNum){
+        this.roundNum = roundNum;
     }
     public Deck getDeck() {
         return deck;
@@ -152,16 +160,15 @@ public class Table {
 
     }
 
-    public void prePlay(){
+    public void prePlay(int roundsPerIncrease){
         if (players.isEmpty()) {
             throw new IllegalStateException("No players to play");
         }
-        else if(players.size() == 1){
-            System.out.println(players.get(0).getName() + " has won the game!");
-
-        }
         else{
             resetRound();
+            if(roundNum != 0 && roundNum % roundsPerIncrease == 0){
+                setStake(getStake() * 2);
+            }
             int dealerIndex = -1;
             for (int i = 0; i < players.size(); i++) {
                 if (players.get(i).isDealer()) {
@@ -182,16 +189,13 @@ public class Table {
                 System.out.println("No dealer found.");
             }
         }
+        for(Player player : players){
+            dealToPlayer(player, 2);
+        }
     }
     //TODO: betting with all-in, checking, raising, and folding
 
     public void startRound(int numCards) {
-    }
-
-    public void roundMain(){
-        if (nonFoldedPlayers.isEmpty()) {
-            throw new IllegalStateException("No players to play");
-        }
     }
 
     public void dealToPlayer(Player player, int numCards){
@@ -223,6 +227,10 @@ public class Table {
                 players.get(0).setDealer(true);
             }
             i++;
+        }
+        setRoundNum(getRoundNum() + 1);
+        if(players.size() == 1){
+            System.out.println(players.get(0).getName() + " has won the game!");
         }
     }
 }

@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Table table = new Table();
+        Table table = new Table(10);
         Player player1 = new Player("Player1", 100);
         Player player2 = new Player("Player2", 100);
         Player player3 = new Player("Player3", 100);
