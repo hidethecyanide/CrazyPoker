@@ -34,9 +34,13 @@ public class TableControl {
             int pot = 0;
             table.prePlay(roundsPerIncrease);
             pot += table.startRound(3);
+            table.resetRound();
             pot += table.startRound(1);
+            table.resetRound();
             pot += table.startRound(1);
+            table.resetRound();
             table.showdown(pot);
+            table.resetRound();
             for (Player player : table.getPlayers()) {
                 if(player.getMoney() <= 0){
                     table.removePlayer(player);
