@@ -33,6 +33,8 @@ public class TableControl {
         while (table.getPlayers().size() > 1) {
             int pot = 0;
             table.prePlay(roundsPerIncrease);
+            pot += table.startRound(0);
+            table.resetRound();
             pot += table.startRound(3);
             table.resetRound();
             pot += table.startRound(1);
