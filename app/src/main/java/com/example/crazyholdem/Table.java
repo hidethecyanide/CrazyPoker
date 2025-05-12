@@ -196,6 +196,29 @@ public class Table {
     //TODO: betting with all-in, checking, raising, and folding
 
     public void startRound(int numCards) {
+        dealCommunityCards(numCards);
+        int dealerIndex = -1;
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).playerHand.evaluateHand();
+            if (players.get(i).isDealer()) {
+                dealerIndex = i;
+                break;
+            }
+        }
+        if (dealerIndex != -1) {
+            int startPlayerIndex = (dealerIndex + 1) % players.size();
+            while(nonFoldedPlayers.size() > 1){
+                if(players.get(startPlayerIndex).getBet() >= standingBet){
+                    standingBet = players.get(startPlayerIndex).getBet();
+                    //TODO: figure out betting
+                }
+                else{
+                }
+            }
+        }
+        else {
+            System.out.println("No dealer found.");
+        }
     }
 
     public void dealToPlayer(Player player, int numCards){
@@ -205,7 +228,6 @@ public class Table {
 
     }
 
-    //TODO: round logic
     public void resetRound(){
         deck.resetDeck();
         clearCommunityCards();

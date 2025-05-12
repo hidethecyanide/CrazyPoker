@@ -8,7 +8,7 @@ public class TableControl {
         this.numPlayers = numPlayers;
         this.timeSetting = timeSetting;
     }
-
+//TODO: dealer shift and winner logic
     public void createTable(){
 
     }
