@@ -46,6 +46,22 @@ public class TableControl {
                     table.removePlayer(player);
                 }
             }
+            int dealerIndex = -1;
+            for (int i = 0; i < table.getPlayers().size(); i++) {
+                if (table.getPlayers().get(i).isDealer()) {
+                    dealerIndex = i;
+                    break;
+                }
+            }
+            if (dealerIndex != -1) {
+                int newDealerIndex = (dealerIndex + 1) % table.getPlayers().size();
+                table.getPlayers().get(newDealerIndex).setDealer(true);
+                table.getPlayers().get(dealerIndex).setDealer(false);
+            }
+            else {
+                System.out.println("No dealer found.");
+            }
+            //TODO: Shop
         }
     }
 
